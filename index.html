@@ -681,6 +681,104 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    .hamburger-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 99px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-soft);
+      color: var(--ink);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .mobile-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 9, 11, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 290;
+      display: none;
+    }
+    .mobile-menu-backdrop.open { display: block; }
+    .mobile-menu-drawer {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: min(300px, 85vw);
+      height: 100vh;
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      gap: 14px;
+      transition: left 0.24s var(--ease-out);
+      box-shadow: 12px 0 36px rgba(9, 9, 11, 0.14);
+      overflow-y: auto;
+    }
+    .mobile-menu-drawer.open { left: 0; }
+    .mobile-menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .mobile-cat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .mobile-cat-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.16s, border-color 0.16s;
+    }
+    .mobile-cat-btn.active {
+      background: var(--ink);
+      color: #ffffff;
+      border-color: var(--ink);
+    }
+    .mobile-cat-btn-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mobile-menu-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
     @media (max-width: 1024px) {
       .hero-grid, .catalog-layout { grid-template-columns: 1fr; }
       .filter-sidebar { position: static; }
@@ -688,10 +786,24 @@
       .cat-portal-grid { grid-template-columns: 1fr; }
       .bento-grid { grid-template-columns: repeat(2, 1fr); }
     }
+    @media (max-width: 900px) {
+      .nav-tabs { display: none; }
+      .hamburger-btn { display: inline-flex; }
+    }
     @media (max-width: 640px) {
-      .product-grid, .bento-grid, .hero-slide-card, .modal-product-layout, .footer-grid { grid-template-columns: 1fr; }
-      .search-pill input { width: 150px; }
-      .search-pill input:focus { width: 175px; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .bento-grid, .hero-slide-card, .modal-product-layout, .footer-grid { grid-template-columns: 1fr; }
+      .card-stage { padding: 6px; }
+      .card-body { padding: 10px; gap: 5px; }
+      .card-meta { font-size: 0.64rem; }
+      .card-title { font-size: 0.86rem; line-height: 1.2; }
+      .card-desc { font-size: 0.72rem; -webkit-line-clamp: 2; }
+      .card-footer { padding-top: 8px; flex-direction: column; align-items: stretch; gap: 6px; }
+      .price-now { font-size: 0.94rem; }
+      .card-action-btn { padding: 7px 10px; font-size: 0.74rem; width: 100%; text-align: center; }
+      .search-pill input { width: 130px; font-size: 0.78rem; padding: 7px 10px 7px 30px; }
+      .search-pill input:focus { width: 155px; }
+      .cloud-pill { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -760,9 +872,67 @@
           <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="cart-badge" id="cart-count">0</span>
         </button>
+        <button class="hamburger-btn" onclick="toggleMobileMenu(true)" aria-label="Abrir menú de categorías">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- MENÚ HAMBURGUESA MÓVIL (TODAS LAS CATEGORÍAS) -->
+  <div class="mobile-menu-backdrop" id="mobile-menu-backdrop" onclick="toggleMobileMenu(false)"></div>
+  <aside class="mobile-menu-drawer" id="mobile-menu-drawer" aria-label="Menú de categorías">
+    <div class="mobile-menu-head">
+      <div style="display:flex; align-items:center; gap:9px;">
+        <img src="logo-ng.jpg" alt="N&G Importados" style="width:30px; height:30px; border-radius:8px; object-fit:cover; border:1px solid var(--border-strong);" />
+        <strong style="font-size:0.95rem; letter-spacing:-0.02em;">N&amp;G <span style="color:var(--gold);">IMPORTADOS</span></strong>
+      </div>
+      <button class="swiper-btn-circle" onclick="toggleMobileMenu(false)" aria-label="Cerrar menú">✕</button>
+    </div>
+
+    <div class="mobile-menu-label">Categorías</div>
+    <div class="mobile-cat-list" id="mobile-cat-list">
+      <button class="mobile-cat-btn active" data-view="inicio" onclick="selectMobileCategory('inicio')">
+        <span class="mobile-cat-btn-left">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Inicio
+        </span>
+        <span>→</span>
+      </button>
+      <button class="mobile-cat-btn" data-view="vapers" onclick="selectMobileCategory('vapers')">
+        <span class="mobile-cat-btn-left">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+          Vapers
+        </span>
+        <span>→</span>
+      </button>
+      <button class="mobile-cat-btn" data-view="perfumes" onclick="selectMobileCategory('perfumes')">
+        <span class="mobile-cat-btn-left">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6v3H9z"/><path d="M7 8h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/><path d="M12 6v2"/></svg>
+          Perfumería
+        </span>
+        <span>→</span>
+      </button>
+      <button class="mobile-cat-btn" data-view="tech" onclick="selectMobileCategory('tech')">
+        <span class="mobile-cat-btn-left">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          Tecnología (Tech)
+        </span>
+        <span>→</span>
+      </button>
+    </div>
+
+    <div class="mobile-menu-footer">
+      <div style="display:flex; align-items:center; gap:7px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Lun-Sáb: 10:30-13:30 | 17:00-22:00</span>
+      </div>
+      <a href="https://www.instagram.com/nyg.importados/" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:7px; color:var(--ink); font-weight:700; text-decoration:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        @nyg.importados
+      </a>
+    </div>
+  </aside>
 
   <!-- VIEW 1: INICIO -->
   <main class="page-view active" id="view-inicio">
@@ -1707,6 +1877,29 @@
       }
       lines.push(`\nTotal estimado: ${formatARS(finalTotal)}`);
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+    }
+
+    function toggleMobileMenu(open) {
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const drawer = document.getElementById('mobile-menu-drawer');
+      if (!backdrop || !drawer) return;
+      if (open) {
+        const activeTab = document.querySelector('#main-nav-tabs .nav-tab-btn.active');
+        const activeView = activeTab ? activeTab.dataset.view : 'inicio';
+        document.querySelectorAll('.mobile-cat-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.view === activeView);
+        });
+      }
+      backdrop.classList.toggle('open', open);
+      drawer.classList.toggle('open', open);
+    }
+
+    function selectMobileCategory(view) {
+      document.querySelectorAll('.mobile-cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+      });
+      switchPageView(view);
+      toggleMobileMenu(false);
     }
 
     document.addEventListener('DOMContentLoaded', loadCatalogFromSupabase);
