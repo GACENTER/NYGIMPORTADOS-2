@@ -1,1719 +1,1714 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="N&G IMPORTADOS — Perfumes, Vapers y AirPods seleccionados. Envío a domicilio en La Rioja. Consultá disponibilidad y comprá por WhatsApp.">
-  <title>N&G IMPORTADOS | Perfumería, Vapers & Tech</title>
-  <link rel="icon" type="image/png" href="favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="N&G IMPORTADOS — Perfumería árabe e importada, Vapers descartables y Tecnología en La Rioja. Stock en vivo desde la nube y envíos en el día." />
+  <title>N&G IMPORTADOS | Vapers, Perfumería & Tech</title>
+  <link rel="icon" type="image/jpeg" href="logo-ng.jpg" />
+  <link rel="apple-touch-icon" href="logo-ng.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Supabase JS SDK v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
-      --bg: #faf9f6; /* Blanco cálido moderno */
-      --panel: #ffffff;
-      --panel2: #f4f2ee;
-      --accent-color: #b59a72; /* Beige elegante / Taupe */
-      --accent-hover: #9c815b;
-      --accent-glow: rgba(181, 154, 114, 0.25);
-      --gold: #b59a72;
-      --gold-light: #d6c4a8;
-      --text: #2c2c2e;
-      --muted: #6e6e73;
-      --line: rgba(181, 154, 114, 0.2);
-      --whatsapp-color: #22c55e;
-      --whatsapp-hover: #16a34a;
-      --border-radius: 14px;
-      --danger: #ef4444;
+      --bg: #FAF8F4;
+      --bg-soft: #F3EFE6;
+      --bg-muted: #EAE2D3;
+      --surface: #FFFFFF;
+      --ink: #1C1B19;
+      --ink-2: #4A453E;
+      --muted: #7C7365;
+      --border: #E6DFD3;
+      --border-strong: #D3C7B4;
+      --gold: #A88F67;
+      --gold-soft: #F2EBD9;
+      --emerald: #059669;
+      --emerald-soft: #ecfdf5;
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 4px 14px rgba(28, 27, 25, 0.05);
+      --shadow-md: 0 14px 36px rgba(28, 27, 25, 0.09);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); padding-bottom: 50px; }
-    a { color: inherit; text-decoration: none; }
-    .wrap { width: min(1160px, 92%); margin: auto; }
-    
-    /* HEADER CON MENÚ HAMBURGUESA DE 3 LÍNEAS */
-    header { 
-      position: sticky; top: 0; z-index: 100; 
-      background: rgba(250, 249, 246, 0.92); backdrop-filter: blur(14px); 
-      border-bottom: 1px solid var(--line);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-    }
-    .nav { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; position: relative; }
-    .brand { font-family: Georgia, serif; font-size: 1.15rem; font-weight: bold; letter-spacing: .13em; color: #1c1c1e; }
-    .brand span { color: var(--accent-color); text-shadow: none; }
-    
-    .nav-right-container { display: flex; align-items: center; gap: 15px; }
 
-    /* BOTÓN HAMBURGUESA DE 3 LÍNEAS */
-    .menu-toggle {
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .serif { font-family: 'Instrument Serif', Georgia, serif; }
+    .wrap { width: min(1320px, 92vw); margin: 0 auto; }
+    .svg-icon { width: 15px; height: 15px; display: inline-block; vertical-align: -2.5px; flex-shrink: 0; }
+    .brand-mark-img { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border-strong); flex-shrink: 0; }
+
+    /* =========================================
+       PANTALLA DE CARGA INICIAL (PRELOADER)
+    ========================================= */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
       background: #ffffff;
-      border: 1px solid var(--accent-color);
-      color: var(--text);
-      font-size: 1.5rem;
-      padding: 6px 12px;
-      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: opacity 0.45s var(--ease-out), visibility 0.45s var(--ease-out);
+    }
+    .preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .preloader-logo {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .preloader-logo span { color: var(--gold); }
+    .preloader-bar {
+      width: 190px;
+      height: 3px;
+      background: var(--bg-muted);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .preloader-bar-fill {
+      width: 45%;
+      height: 100%;
+      background: var(--ink);
+      border-radius: 99px;
+      animation: preloaderSlide 1.1s infinite ease-in-out;
+    }
+    .preloader-sub {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    @keyframes preloaderSlide {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(240%); }
+    }
+
+    /* =========================================
+       ANNOUNCEMENT BAR & STICKY HEADER
+    ========================================= */
+    .top-bar {
+      background: var(--ink);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      text-align: center;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .top-bar strong { color: #f5d061; font-weight: 700; }
+    .top-bar-sep { opacity: 0.35; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px 0;
+      flex-wrap: wrap;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .brand-logo {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .brand-logo span { color: var(--gold); font-weight: 700; }
+    .cloud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      color: var(--ink-2);
+    }
+    .cloud-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--emerald); }
+    .cloud-dot.offline { background: var(--gold); }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nav-tab-btn {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink-2);
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background 0.16s var(--ease-out), color 0.16s var(--ease-out);
+    }
+    .nav-tab-btn.active {
+      background: var(--ink);
+      color: #ffffff;
+    }
+    @media (hover: hover) {
+      .nav-tab-btn:not(.active):hover { background: var(--bg-soft); color: var(--ink); }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .search-pill {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-pill input {
+      width: 220px;
+      padding: 8px 14px 8px 34px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      font-size: 0.83rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.16s var(--ease-out), background 0.16s var(--ease-out), width 0.2s var(--ease-out);
+    }
+    .search-pill input:focus {
+      background: var(--bg);
+      border-color: var(--ink);
+      width: 260px;
+    }
+    .search-pill svg {
+      position: absolute;
+      left: 11px;
+      width: 15px;
+      height: 15px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #ffffff;
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .cart-badge {
+      background: var(--gold);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 99px;
+    }
+
+    /* =========================================
+       VIEWS / CAMBIO DE PÁGINA POR CATEGORÍA
+    ========================================= */
+    .page-view {
+      display: none;
+      animation: viewFade 0.24s var(--ease-out);
+    }
+    .page-view.active { display: block; }
+    @keyframes viewFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================================
+       EDITORIAL SPLIT HERO + SWIPER #1
+    ========================================= */
+    .hero-section {
+      padding: 36px 0 42px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      background: var(--gold-soft);
+      color: #8a6614;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .hero-title {
+      font-size: clamp(2.2rem, 4.3vw, 3.75rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .hero-title .serif { font-weight: 400; font-style: italic; color: var(--gold); }
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--ink-2);
+      max-width: 520px;
+      margin-bottom: 24px;
+    }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 99px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: transform 0.16s var(--ease-out), background 0.16s var(--ease-out), border-color 0.16s var(--ease-out);
+    }
+    .btn-dark { background: var(--ink); color: #ffffff; }
+    .btn-outline { background: var(--bg); color: var(--ink); border-color: var(--border-strong); }
+    .btn-emerald { background: var(--emerald); color: #ffffff; }
+    @media (hover: hover) {
+      .btn:hover { transform: translateY(-1px); }
+      .btn-outline:hover { border-color: var(--ink); }
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+    .metric-val { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.03em; }
+    .metric-lbl { font-size: 0.76rem; color: var(--muted); font-weight: 500; }
+
+    .hero-swiper-wrap {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      overflow: hidden;
+    }
+    .hero-swiper-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .hero-swiper-head span {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+    .swiper-nav-mini { display: flex; gap: 6px; }
+    .swiper-btn-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .hero-slide-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 290px;
+    }
+    .hero-slide-img { background: var(--bg-soft); overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    .hero-slide-img img { width: 100%; height: 100%; max-height: 270px; object-fit: contain; }
+    .hero-slide-info { padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+    .badge-gold { background: var(--gold-soft); color: #8a6614; }
+    .badge-emerald { background: var(--emerald-soft); color: var(--emerald); }
+    .badge-danger { background: var(--danger-soft); color: var(--danger); }
+    .badge-ink { background: var(--ink); color: #ffffff; }
+
+    /* =========================================
+       CATEGORY PORTAL CARDS (INICIO)
+    ========================================= */
+    .cat-portal-section { padding: 44px 0; border-bottom: 1px solid var(--border); }
+    .cat-portal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .cat-portal-card {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      min-height: 170px;
+      transition: transform 0.18s var(--ease-out), border-color 0.18s var(--ease-out);
+    }
+    @media (hover: hover) {
+      .cat-portal-card:hover { transform: translateY(-3px); border-color: var(--ink); }
+    }
+
+    /* =========================================
+       BRAND STRIP SWIPER (#2)
+    ========================================= */
+    .brand-strip-section { padding: 18px 0; border-bottom: 1px solid var(--border); background: var(--bg); }
+    .brand-chip {
+      width: auto !important;
+      padding: 9px 18px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ink-2);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .brand-chip.active { background: var(--ink); color: #ffffff; border-color: var(--ink); }
+
+    /* =========================================
+       CATALOG SECTIONS & SIDEBAR
+    ========================================= */
+    .promo-section { padding: 46px 0; background: var(--bg-soft); border-bottom: 1px solid var(--border); }
+    .catalog-section { padding: 48px 0 64px; }
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .section-kicker {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .section-title { font-size: clamp(1.65rem, 2.8vw, 2.25rem); font-weight: 800; letter-spacing: -0.025em; }
+
+    .catalog-layout { display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start; }
+    .filter-sidebar {
+      position: sticky;
+      top: 84px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+    .filter-group { margin-bottom: 20px; }
+    .filter-group:last-child { margin-bottom: 0; }
+    .filter-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .filter-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .f-pill {
+      padding: 6px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--ink-2);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .f-pill.active { background: var(--ink); color: #ffffff; border-color: var(--ink); }
+    .filter-select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out), border-color 0.18s var(--ease-out);
+    }
+    @media (hover: hover) {
+      .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+    }
+    .card-stage { position: relative; aspect-ratio: 4 / 3; background: var(--bg-soft); overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    .card-stage img { width: 100%; height: 100%; object-fit: contain; }
+    .card-badges-top {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      pointer-events: none;
+    }
+    .card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; gap: 8px; }
+    .card-meta { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+    .card-title { font-size: 1.02rem; font-weight: 700; color: var(--ink); line-height: 1.25; }
+    .card-desc { font-size: 0.81rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .price-now { font-size: 1.08rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .price-promo-tag { font-size: 0.72rem; font-weight: 700; color: var(--emerald); display: block; }
+    .card-action-btn {
+      padding: 8px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .card-action-btn.outline { background: var(--bg); color: var(--ink); border-color: var(--border-strong); }
+
+    /* =========================================
+       BENTO SKILLS & FOOTER
+    ========================================= */
+    .bento-section { padding: 48px 0; background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .bento-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; }
+    .bento-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--bg-soft); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.15rem; margin-bottom: 12px; }
+    .bento-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 5px; }
+    .bento-card p { font-size: 0.82rem; color: var(--muted); }
+
+    footer { background: var(--bg); padding: 46px 0 28px; border-top: 1px solid var(--border); }
+    .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .skill-tag { font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--ink-2); }
+    .footer-bottom { padding-top: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 0.8rem; color: var(--muted); }
+
+    /* =========================================
+       MODALS & CART DRAWER
+    ========================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 9, 11, 0.55);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: none;
+      align-items: center;
       justify-content: center;
-      gap: 4px;
-      transition: 0.3s;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 18px;
     }
-    .menu-toggle:hover { background: var(--accent-color); color: #fff; }
-    .menu-toggle:hover span { background-color: #fff; }
-    .menu-toggle span {
-      display: block; width: 22px; height: 2px;
-      background-color: var(--text); border-radius: 2px;
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: min(820px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 26px;
+      position: relative;
+      box-shadow: var(--shadow-md);
     }
-
-    /* MENÚ DESPLEGABLE DESDE LAS 3 LÍNEAS */
-    .dropdown-menu {
-      display: none; position: absolute; top: 70px; right: 0;
-      background: var(--panel); border: 1px solid var(--accent-color);
-      border-radius: var(--border-radius); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      width: 220px; padding: 10px 0; z-index: 200;
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      color: var(--ink);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
     }
-    .dropdown-menu.show { display: block; }
-    .dropdown-menu button {
-      width: 100%; text-align: left; padding: 12px 20px;
-      background: none; border: none; color: var(--text);
-      font-size: 0.95rem; cursor: pointer; transition: background 0.2s, color 0.2s;
-      display: flex; align-items: center; gap: 10px;
+    .modal-product-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 24px; align-items: start; }
+    .modal-img-stage { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); min-height: 300px; max-height: 460px; display: flex; align-items: center; justify-content: center; padding: 12px; overflow: hidden; }
+    .modal-img-stage img { width: 100%; height: 100%; max-height: 430px; object-fit: contain; border-radius: 10px; }
+    .flavor-search { width: 100%; padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-soft); font-size: 0.85rem; margin: 8px 0 10px; }
+    .flavor-list { max-height: 230px; overflow-y: auto; display: grid; gap: 6px; }
+    .flavor-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); font-size: 0.84rem; font-weight: 600; cursor: pointer; }
+    .flavor-item.selected { border-color: var(--ink); background: var(--bg-soft); }
+    .flavor-item.soldout { opacity: 0.5; cursor: not-allowed; background: var(--bg-muted); text-decoration: line-through; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -430px;
+      width: min(410px, 100vw);
+      height: 100vh;
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      z-index: 250;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.26s var(--ease-out);
+      box-shadow: -12px 0 40px rgba(9, 9, 11, 0.12);
     }
-    .dropdown-menu button:hover, .dropdown-menu button.active {
-      background: #f4f2ee; color: var(--accent-color); font-weight: bold;
+    .cart-drawer.open { right: 0; }
+    .cart-head { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+    .cart-item { padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-soft); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .cart-foot { padding: 18px 20px; border-top: 1px solid var(--border); background: var(--bg-soft); }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 99px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 400;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: var(--shadow-md);
     }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    nav { display: flex; gap: 26px; color: var(--muted); font-size: .9rem; align-items: center; }
-    nav a:hover { color: var(--accent-color); }
-    
-    .horario-badge {
-      display: inline-block; background-color: #f4f2ee;
-      border: 1px solid var(--line); color: var(--muted);
-      padding: 6px 14px; border-radius: 30px; font-size: 0.8rem;
+    @media (max-width: 1024px) {
+      .hero-grid, .catalog-layout { grid-template-columns: 1fr; }
+      .filter-sidebar { position: static; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cat-portal-grid { grid-template-columns: 1fr; }
+      .bento-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    .horario-badge strong { color: #16a34a; }
-
-    /* BOTONES */
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border: 1px solid var(--accent-color); background: var(--accent-color); color: #fff; border-radius: 8px; font-weight: bold; font-size: .87rem; transition: .3s; box-shadow: 0 4px 12px var(--accent-glow); cursor: pointer; }
-    .btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 16px var(--accent-glow); }
-    .btn-outline { background: transparent; color: var(--text); border-color: #d1cbd5; }
-    .btn-outline:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(181, 154, 114, 0.08); }
-
-    /* HERO */
-    .hero { position: relative; overflow: hidden; padding: 92px 0 86px; background: radial-gradient(ellipse at 77% 45%, rgba(181,154,114,.12), transparent 40%), linear-gradient(120deg, #faf9f6, #f2efe9); }
-    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 54px; }
-    .eyebrow { text-transform: uppercase; letter-spacing: .23em; color: var(--accent-color); font-size: .72rem; font-weight: bold; }
-    h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; font-weight: normal; color: #1c1c1e; }
-    h1 { font-size: clamp(3.2rem, 7vw, 5.8rem); line-height: .96; letter-spacing: -.045em; margin: 20px 0; }
-    h1 em { font-style: normal; color: var(--accent-color); }
-    .hero p { max-width: 520px; color: var(--muted); font-size: 1.04rem; line-height: 1.85; }
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-    
-    .hero-visual { min-height: 420px; display: grid; place-items: center; position: relative; border: 1px solid var(--line); background: linear-gradient(140deg, #ffffff, #f0ece6 70%); border-radius: var(--border-radius); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-    .hero-caption { position: absolute; bottom: 22px; left: 20px; right: 20px; text-align: center; color: var(--muted); font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; }
-
-    section { padding: 78px 0; border-bottom: 1px solid #eae5df; }
-    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 32px; }
-    h2 { font-size: clamp(2.2rem, 4vw, 3.2rem); letter-spacing: -.03em; margin: 10px 0 0; }
-    .section-head p { max-width: 460px; color: var(--muted); line-height: 1.7; margin: 0; }
-
-    /* FILTROS GENERALES Y DE VAPERS */
-    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-    .filter { cursor: pointer; background: #ffffff; border: 1px solid #dcd6ce; color: var(--muted); padding: 9px 16px; font-size: .85rem; border-radius: 20px; transition: .3s; }
-    .filter.active, .filter:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; box-shadow: 0 4px 10px var(--accent-glow); }
-
-    /* GRILLA PRODUCTOS */
-    .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
-    .product { background: var(--panel); border: 1px solid #eae5df; border-radius: var(--border-radius); overflow: hidden; transition: transform .3s, border-color .3s, box-shadow .3s; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-    .product:hover { transform: translateY(-6px); border-color: var(--accent-color); box-shadow: 0 12px 30px var(--accent-glow); }
-    .product.hidden { display: none; }
-    
-    .product-photo { height: 260px; background: #f4f2ee; display: grid; place-items: center; overflow: hidden; position: relative; }
-    .product-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
-    .product:hover .product-photo img { transform: scale(1.05); }
-    
-    .product-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-    .tag { color: var(--accent-color); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; font-weight: bold; }
-    .product h3 { font-size: 1.2rem; margin: 8px 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1c1c1e; }
-    .product p { font-size: .88rem; color: var(--muted); line-height: 1.6; margin: 0 0 18px; min-height: 42px; }
-    
-    .product-bottom { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: auto; }
-    .price-container { display: flex; flex-direction: column; align-items: flex-start; }
-    .old-price { display: none; }
-    .price { font-weight: bold; color: #1c1c1e; font-size: 1.1rem; }
-    
-    .small-btn { padding: 9px 14px; border: 1px solid #dcd6ce; background: #ffffff; color: var(--text); font-size: .8rem; border-radius: 8px; transition: .2s; cursor: pointer; display: inline-flex; align-items: center; }
-    .small-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; box-shadow: 0 4px 10px var(--accent-glow); }
-
-    /* VAPERS FILTER SECTION */
-    .filter-section-vaper {
-        background-color: var(--panel); padding: 20px;
-        border-radius: var(--border-radius); margin-bottom: 25px; border: 1px solid #eae5df;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    @media (max-width: 640px) {
+      .product-grid, .bento-grid, .hero-slide-card, .modal-product-layout, .footer-grid { grid-template-columns: 1fr; }
+      .search-pill input { width: 150px; }
+      .search-pill input:focus { width: 175px; }
     }
-    .filter-title { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-
-    /* SOBRE NOSOTROS & ENVÍOS */
-    .about { background: #f2efe9; }
-    .about-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 55px; align-items: center; }
-    .about-copy { color: var(--muted); line-height: 1.9; }
-    .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 25px; }
-    .feature { padding: 20px; border: 1px solid #eae5df; background: var(--panel); border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-    .feature b { display: block; color: #1c1c1e; margin-bottom: 9px; font-size: 0.95rem; }
-    .feature span { color: var(--muted); font-size: .87rem; line-height: 1.6; }
-
-    /* CONTACTO / CAJA FINAL */
-    .contact-box { display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 40px; border: 1px solid var(--accent-color); border-radius: var(--border-radius); background: linear-gradient(115deg, rgba(181,154,114,.12), rgba(255,255,255,.9)); box-shadow: 0 10px 30px var(--accent-glow); }
-    .contact-box p { color: var(--muted); line-height: 1.7; margin-bottom: 0; }
-
-    /* MODAL VAPERS */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.45); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-    .modal-content { background-color: var(--panel); width: 100%; max-width: 750px; border-radius: var(--border-radius); border: 1px solid var(--accent-color); padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-    .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: var(--muted); cursor: pointer; background: none; border: none; transition: color 0.2s; }
-    .close-modal:hover { color: #1c1c1e; }
-    .modal-body { display: flex; flex-direction: column; gap: 25px; }
-    @media (min-width: 650px) { .modal-body { flex-direction: row; } }
-    .modal-img-container { flex: 1; background-color: #f4f2ee; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 20px; min-height: 280px; border: 1px solid #eae5df; }
-    .modal-img-container img { max-width: 100%; max-height: 240px; object-fit: contain; transition: opacity 0.2s ease-in-out; }
-    .modal-info { flex: 1.2; display: flex; flex-direction: column; gap: 12px; }
-    .modal-title { font-size: 1.5rem; font-weight: bold; font-family: Georgia, serif; color: #1c1c1e; }
-    
-    .quantity-control { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
-    .qty-btn { background-color: #f4f2ee; color: #1c1c1e; border: 1px solid #dcd6ce; width: 36px; height: 36px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
-    .qty-btn:hover { background-color: var(--accent-color); color: #fff; }
-    .qty-input { width: 50px; text-align: center; background-color: #ffffff; color: #1c1c1e; border: 1px solid #dcd6ce; border-radius: 8px; padding: 6px; font-size: 1.1rem; }
-    
-    .flavors-container { margin-top: 5px; }
-    .flavor-option-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; margin-top: 6px; padding-right: 5px; }
-    .flavor-item { display: flex; align-items: center; gap: 12px; background-color: #f9f8f6; border: 1px solid #eae5df; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-    .flavor-item:hover { border-color: var(--accent-color); background-color: #f4f2ee; }
-    .flavor-item.selected { border-color: var(--accent-color); background-color: rgba(181, 154, 114, 0.12); box-shadow: 0 0 8px var(--accent-glow); }
-    .flavor-item.soldout { opacity: 0.4; cursor: not-allowed; border-color: #fca5a5; }
-    .flavor-name { font-size: 0.85rem; flex-grow: 1; color: #1c1c1e; }
-    
-    .btn-whatsapp { display: flex; align-items: center; justify-content: center; gap: 10px; background-color: var(--whatsapp-color); color: #fff; text-decoration: none; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 1rem; margin-top: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); border:none; cursor:pointer; width:100%; }
-    .btn-whatsapp:hover { background-color: var(--whatsapp-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5); }
-
-    /* BOTÓN DISCRETO EN EL FOOTER PARA ADMIN */
-    .admin-footer-btn {
-      background: transparent; border: none; color: var(--muted);
-      cursor: pointer; font-size: 0.82rem; transition: color 0.3s; margin-left: 10px;
-    }
-    .admin-footer-btn:hover { color: var(--accent-color); }
-
-    /* MODAL DEL PANEL DE CONTROL (ADMIN MULTIRRUBRO) */
-    .admin-modal {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 2000;
-      display: none; justify-content: center; align-items: center; padding: 20px;
-    }
-    .admin-container {
-      background: #ffffff; border: 1px solid var(--accent-color);
-      width: 100%; max-width: 950px; height: 90vh; border-radius: 16px;
-      display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-    }
-    .admin-header {
-      padding: 18px 20px; background: #f4f2ee; border-bottom: 1px solid #eae5df;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .admin-header h3 { color: var(--accent-color); font-size: 1.25rem; display: flex; align-items: center; gap: 10px; }
-    
-    .admin-tabs { display: flex; gap: 10px; background: #faf9f6; padding: 10px 20px; border-bottom: 1px solid #eae5df; }
-    .admin-tab { padding: 8px 16px; background: transparent; border: 1px solid #dcd6ce; color: var(--muted); border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
-    .admin-tab.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); font-weight: bold; }
-
-    .admin-body { padding: 20px; flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background: #faf9f6; }
-    .admin-card { background: #ffffff; border: 1px solid #eae5df; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-    .admin-card-title { font-weight: bold; color: var(--accent-color); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eae5df; padding-bottom: 8px; flex-wrap: wrap; gap: 10px; }
-
-    /* FORMULARIOS ADMIN */
-    .admin-form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-    .admin-form-group label { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
-    .input-field, .select-field, .textarea-field {
-      background: #ffffff; border: 1px solid #dcd6ce; color: #1c1c1e;
-      padding: 9px 12px; border-radius: 6px; font-size: 0.88rem; outline: none; transition: border-color 0.2s;
-    }
-    .input-field:focus, .select-field:focus, .textarea-field:focus { border-color: var(--accent-color); }
-    .textarea-field { resize: vertical; min-height: 70px; }
-    .admin-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    .file-input-wrapper { display: flex; flex-direction: column; gap: 6px; }
-    .file-input-btn { background: #f4f2ee; border: 1px dashed var(--accent-color); color: var(--text); padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
-    .file-input-btn:hover { background: rgba(181, 154, 114, 0.1); }
-    .file-preview { max-height: 80px; object-fit: contain; margin-top: 6px; border-radius: 6px; display: none; }
-
-    /* SWITCH INTERRUPTOR CUSTOM */
-    .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider-switch {
-      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #d1cbd5; transition: .3s; border-radius: 34px;
-    }
-    .slider-switch:before {
-      position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
-      background-color: white; transition: .3s; border-radius: 50%;
-    }
-    input:checked + .slider-switch { background-color: #22c55e; }
-    input:checked + .slider-switch:before { transform: translateX(22px); }
-
-    .flavor-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #eae5df; background: #f9f8f6; border-radius: 6px; margin-bottom: 6px; gap: 10px; }
-    .flavor-row-name { font-size: 0.9rem; flex-grow: 1; color: #1c1c1e; }
-
-    footer { padding: 28px 0; border-top: 1px solid #eae5df; color: var(--muted); font-size: .82rem; background: #f4f2ee; }
-    .footer-row { display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; align-items: center; }
-
-    /* VISTA CELULAR (2 COLUMNAS Y CUADROS MÁS CHICOS) */
-    @media(max-width:760px){
-      nav { display: none; }
-      .nav { min-height: 68px; }
-      .hero { padding: 62px 0 52px; }
-      .hero-grid, .about-grid { grid-template-columns: 1fr; gap: 30px; }
-      .hero-visual { min-height: 340px; }
-      section { padding: 40px 0; }
-      .section-head { display: block; }
-      .section-head p { margin-top: 14px; }
-      
-      .products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .product-photo { height: 140px; }
-      .product-info { padding: 10px; }
-      .product h3 { font-size: 0.88rem; line-height: 1.2; margin: 4px 0; }
-      .product p { font-size: 0.72rem; line-height: 1.3; margin: 0 0 8px; min-height: auto; }
-      .tag { font-size: 0.6rem; }
-      .price { font-size: 0.88rem; }
-      .old-price { font-size: 0.7em; }
-      .small-btn { padding: 6px 8px; font-size: 0.7rem; }
-      .product-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
-
-      .contact-box { display: block; padding: 26px; }
-      .contact-box .actions { margin-top: 22px; }
-      .admin-row-2 { grid-template-columns: 1fr; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="wrap nav">
-      <a class="brand" href="#inicio">N&G <span>IMPORTADOS</span></a>
-      
-      <div class="nav-right-container">
-        <nav aria-label="Navegación principal">
-          <a href="#perfumes">Perfumes</a>
-          <a href="#vapers">Vapers</a>
-          <a href="#airpods">AirPods & Tech</a>
-          <a href="#nosotros">Nosotros</a>
-          <div class="horario-badge">
-            🕒 Lun-Sáb: <strong>10:30-13:30</strong> | <strong>17:00-22:00</strong>
-          </div>
-        </nav>
+  <!-- PANTALLA DE CARGA INICIAL -->
+  <div class="preloader" id="preloader" style="background:#FAF8F4;">
+    <img src="logo-ng.jpg" alt="N&G Importados" style="width:128px; height:128px; border-radius:22px; object-fit:cover; border:1px solid var(--border-strong); box-shadow: 0 12px 30px rgba(28, 27, 25, 0.12);" />
+    <div class="preloader-logo">N&G <span>IMPORTADOS</span></div>
+    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+    <div class="preloader-sub">Cargando catálogo en vivo...</div>
+  </div>
 
-        <!-- BOTÓN DE 3 LÍNEAS PARA FILTRAR O NAVEGAR -->
-        <button class="menu-toggle" id="menuBtn" aria-label="Abrir Menú">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+  <!-- TOP ANNOUNCEMENT BAR -->
+  <div class="top-bar">
+    <span><strong>N&G IMPORTADOS</strong> · La Rioja Capital</span>
+    <span class="top-bar-sep">|</span>
+    <span style="display:inline-flex; align-items:center; gap:5px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f5d061" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Lun-Sáb: 10:30-13:30 | 17:00-22:00
+    </span>
+    <span class="top-bar-sep">|</span>
+    <a href="https://www.instagram.com/nyg.importados/" target="_blank" rel="noopener" style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f5d061" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      @nyg.importados
+    </a>
+  </div>
 
-        <!-- MENÚ DESPLEGABLE -->
-        <div class="dropdown-menu" id="dropdownMenu">
-          <button class="active" onclick="filterMainCategory('todos', this)">✨ Ver Todos</button>
-          <button onclick="filterMainCategory('perfumes', this)">🧪 Perfumes</button>
-          <button onclick="filterMainCategory('vapers', this)">💨 Vapers</button>
-          <button onclick="filterMainCategory('airpods', this)">🎧 AirPods & Tech</button>
+  <!-- STICKY HEADER CON CAMBIO DE PÁGINAS -->
+  <header style="background:rgba(250, 248, 244, 0.92);">
+    <div class="wrap nav-row">
+      <div class="brand-group" onclick="switchPageView('inicio')">
+        <img src="logo-ng.jpg" alt="N&G Importados" class="brand-mark-img" />
+        <div class="brand-logo">N&G <span>IMPORTADOS</span></div>
+        <div class="cloud-pill">
+          <span class="cloud-dot" id="cloud-dot"></span>
+          <span id="cloud-status-text">Conectando...</span>
         </div>
+      </div>
+
+      <nav class="nav-tabs" id="main-nav-tabs">
+        <button class="nav-tab-btn active" data-view="inicio" onclick="switchPageView('inicio')">Inicio</button>
+        <button class="nav-tab-btn" data-view="vapers" onclick="switchPageView('vapers')">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+          Vapers
+        </button>
+        <button class="nav-tab-btn" data-view="perfumes" onclick="switchPageView('perfumes')">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6v3H9z"/><path d="M7 8h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/><path d="M12 6v2"/></svg>
+          Perfumería
+        </button>
+        <button class="nav-tab-btn" data-view="tech" onclick="switchPageView('tech')">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          Tech
+        </button>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="search-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="global-search" placeholder="Buscar modelo, sabor..." oninput="handleGlobalSearch(this.value)" />
+        </div>
+        <button class="icon-btn" onclick="toggleCart(true)" aria-label="Ver pedido">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-badge" id="cart-count">0</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <main>
-    <!-- HERO SECTION -->
-    <section class="hero" id="inicio">
+  <!-- VIEW 1: INICIO -->
+  <main class="page-view active" id="view-inicio">
+    <section class="hero-section">
       <div class="wrap hero-grid">
         <div>
-          <div class="eyebrow">Tienda Multirrubro · N&G Importados</div>
-          <h1>Esencias, Vapers & <em>Tecnología.</em></h1>
-          <p>Descubrí nuestra selección exclusiva de perfumería selecta, vapers de última generación con gran variedad de sabores y productos tecnológicos de alta calidad. <strong>¡Envíos a domicilio en toda la ciudad de La Rioja!</strong></p>
-          <div class="actions">
-            <a class="btn" href="#catalogo-general">Explorar productos ↘</a>
-            <a class="btn btn-outline" id="whatsapp-hero" href="https://wa.me/5493804148332" target="_blank" rel="noopener">Pedir por WhatsApp ↗</a>
+          <div class="hero-eyebrow">Edición 2026 · Catálogo Oficial</div>
+          <h1 class="hero-title">
+            Curaduría en <span class="serif">Vapers</span>, Perfumería Árabe & Tech.
+          </h1>
+          <p class="hero-desc">
+            Explorá stock real actualizado desde la nube, navegá por categoría, elegí sabores al instante y armá tu pedido directo por WhatsApp en La Rioja.
+          </p>
+          <div class="hero-ctas">
+            <button class="btn btn-dark" onclick="switchPageView('vapers')">Explorar Vapers</button>
+            <button class="btn btn-outline" onclick="switchPageView('perfumes')">Ver Perfumería</button>
           </div>
-        </div>
-        <div class="hero-visual">
-          <img src="favicon.png" alt="N&G Importados Multirrubro" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=600&q=80'">
-          <div class="hero-caption">Calidad · Estilo · Envío a Domicilio en La Rioja</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCIÓN GENERAL DE CATEGORÍAS -->
-    <div id="catalogo-general" class="wrap">
-
-      <!-- 1. PERFUMES -->
-      <section id="perfumes" class="main-section">
-        <div>
-          <div class="section-head">
+          <div class="hero-metrics">
             <div>
-              <div class="eyebrow">Colección Selecta</div>
-              <h2>Perfumería Importada</h2>
+              <div class="metric-val" id="stat-vapers">--</div>
+              <div class="metric-lbl">Modelos de Vapers</div>
             </div>
-            <p>Fragancias árabes e importadas originales. Filtrá por género y consultá directamente por WhatsApp.</p>
-          </div>
-          
-          <div class="filters" aria-label="Filtrar perfumes">
-            <button class="filter active" onclick="filterPerfumes('todos', this)">Todos</button>
-            <button class="filter" onclick="filterPerfumes('masculino', this)">Masculinos</button>
-            <button class="filter" onclick="filterPerfumes('femenino', this)">Femeninos</button>
-            <button class="filter" onclick="filterPerfumes('unisex', this)">Unisex</button>
-          </div>
-
-          <div class="products" id="perfume-grid">
-            <!-- Los perfumes iniciales y administrados dinámicamente se renderizan mediante JS -->
-          </div>
-        </div>
-      </section>
-
-      <!-- 2. VAPERS -->
-      <section id="vapers" class="main-section">
-        <div>
-          <div class="section-head">
             <div>
-              <div class="eyebrow">Vape Shop Pro</div>
-              <h2>Vapers & Dispositivos Descartables</h2>
+              <div class="metric-val" id="stat-perfumes">--</div>
+              <div class="metric-lbl">Fragancias Árabes</div>
             </div>
-            <p>Explorá nuestra gran variedad de vapers, seleccioná tu marca, puffs preferidos y elegí el sabor disponible mediante nuestro selector interactivo.</p>
-          </div>
-
-          <!-- FILTROS DE VAPERS -->
-          <div class="filter-section-vaper">
-            <div class="filter-title">Filtrar por Marca</div>
-            <div class="filter-group" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
-              <button class="filter active" onclick="filterVapers('brand', 'all', this)">Todas</button>
-              <button class="filter" onclick="filterVapers('brand', 'dinner-lady', this)">Dinner Lady</button>
-              <button class="filter" onclick="filterVapers('brand', 'nikbar', this)">Nikbar</button>
-              <button class="filter" onclick="filterVapers('brand', 'maskking', this)">Maskking</button>
-              <button class="filter" onclick="filterVapers('brand', 'ignite', this)">Ignite</button>
-              <button class="filter" onclick="filterVapers('brand', 'elfbar', this)">Elfbar</button>
-              <button class="filter" onclick="filterVapers('brand', 'ebcreate', this)">EBCreate</button>
-              <button class="filter" onclick="filterVapers('brand', 'sex-addict', this)">Sex Addict</button>
-              <button class="filter" onclick="filterVapers('brand', 'blvk', this)">BLVK</button>
-              <button class="filter" onclick="filterVapers('brand', 'lost-mary', this)">Lost Mary</button>
-              <button class="filter" onclick="filterVapers('brand', 'oxbar', this)">OXBAR</button>
-              <button class="filter" onclick="filterVapers('brand', 'nic-king', this)">Nic King</button>
-            </div>
-
-            <div class="filter-title" style="margin-top: 12px;">Filtrar por Puffs</div>
-            <div class="filter-group" style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="filter active" onclick="filterVapers('puffs', 'all', this)">Todos</button>
-              <button class="filter" onclick="filterVapers('puffs', '10k', this)">10K</button>
-              <button class="filter" onclick="filterVapers('puffs', '15k', this)">15K</button>
-              <button class="filter" onclick="filterVapers('puffs', '20k', this)">20K</button>
-              <button class="filter" onclick="filterVapers('puffs', '23k', this)">23K</button>
-              <button class="filter" onclick="filterVapers('puffs', '28k', this)">28K</button>
-              <button class="filter" onclick="filterVapers('puffs', '30k', this)">30K</button>
-              <button class="filter" onclick="filterVapers('puffs', '35k', this)">35K</button>
-              <button class="filter" onclick="filterVapers('puffs', '40k', this)">40K</button>
-              <button class="filter" onclick="filterVapers('puffs', '45k', this)">45K</button>
-              <button class="filter" onclick="filterVapers('puffs', '50k', this)">50K</button>
-              <button class="filter" onclick="filterVapers('puffs', '100k', this)">100K</button>
-            </div>
-          </div>
-
-          <!-- GRID DE VAPERS -->
-          <div class="products" id="vaper-grid"></div>
-        </div>
-      </section>
-
-      <!-- 3. AIRPODS & TECNOLOGÍA -->
-      <section id="airpods" class="main-section">
-        <div>
-          <div class="section-head">
             <div>
-              <div class="eyebrow">Tecnología Audio & Más</div>
-              <h2>Gadgets & Tecnología</h2>
+              <div class="metric-val">Hoy</div>
+              <div class="metric-lbl">Envíos en La Rioja</div>
             </div>
-            <p>Disfrutá de sonido envolvente, diseño anatómico y la mejor calidad en nuestros productos tecnológicos seleccionados.</p>
-          </div>
-
-          <div class="products" id="tech-grid">
-            <!-- Renderizado dinámico -->
           </div>
         </div>
-      </section>
 
-    </div>
-
-    <!-- NOSOTROS & ENVÍOS -->
-    <section class="about" id="nosotros">
-      <div class="wrap about-grid">
-        <div>
-          <div class="eyebrow">Nuestra esencia</div>
-          <h2>El detalle<br>hace la diferencia.</h2>
-        </div>
-        <div>
-          <p class="about-copy">En N&G IMPORTADOS combinamos perfumería selecta, vapers de máxima duración y tecnología de audio en un solo lugar. Ofrecemos <b>envío a domicilio en toda la ciudad de La Rioja</b> para que recibas tu pedido de forma rápida y segura.</p>
-          <div class="features">
-            <div class="feature"><b>◆ Envío a domicilio</b><span>Coordinamos entregas rápidas en toda la ciudad de La Rioja.</span></div>
-            <div class="feature"><b>◆ Atención personalizada</b><span>Te asesoramos por WhatsApp sobre stock, sabores y modelos.</span></div>
+        <div class="hero-swiper-wrap">
+          <div class="hero-swiper-head">
+            <span>Destacados de la semana</span>
+            <div class="swiper-nav-mini">
+              <button class="swiper-btn-circle hero-prev" aria-label="Anterior">←</button>
+              <button class="swiper-btn-circle hero-next" aria-label="Siguiente">→</button>
+            </div>
+          </div>
+          <div class="swiper hero-swiper">
+            <div class="swiper-wrapper" id="hero-swiper-wrapper"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CONTACTO -->
-    <section id="contacto">
-      <div class="wrap contact-box">
-        <div>
-          <div class="eyebrow">Consultas y pedidos</div>
-          <h2>Tu próximo producto te espera.</h2>
-          <p>Consultá stock, precios y envíos a domicilio en La Rioja antes de realizar tu pedido.</p>
+    <!-- PORTALES POR CATEGORÍA -->
+    <section class="cat-portal-section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Explorá por Sección</div>
+            <h2 class="section-title">Elegí tu Categoría</h2>
+          </div>
         </div>
-        <div class="actions">
-          <a class="btn" id="whatsapp-main" href="https://wa.me/5493804148332" target="_blank" rel="noopener">WhatsApp ↗</a>
-          <a class="btn btn-outline" id="instagram-link" href="https://instagram.com/nyg.importados" target="_blank" rel="noopener">Instagram ↗</a>
+        <div class="cat-portal-grid">
+          <div class="cat-portal-card" onclick="switchPageView('vapers')">
+            <div>
+              <span class="badge badge-ink">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+                Vapers
+              </span>
+              <h3 style="font-size:1.35rem; font-weight:800; margin:12px 0 4px;">Catálogo de Vapers</h3>
+              <p style="font-size:0.84rem; color:var(--muted);">Desde 10K hasta 100K puffs · Dinner Lady, Ignite, Elfbar, Maskking y más.</p>
+            </div>
+            <strong style="font-size:0.84rem; margin-top:16px;">Entrar a Vapers →</strong>
+          </div>
+          <div class="cat-portal-card" onclick="switchPageView('perfumes')">
+            <div>
+              <span class="badge badge-gold">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6v3H9z"/><path d="M7 8h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/><path d="M12 6v2"/></svg>
+                Fragancias
+              </span>
+              <h3 style="font-size:1.35rem; font-weight:800; margin:12px 0 4px;">Perfumería Árabe</h3>
+              <p style="font-size:0.84rem; color:var(--muted);">Masculinos, Femeninos y Unisex importados con excelente fijación.</p>
+            </div>
+            <strong style="font-size:0.84rem; margin-top:16px;">Entrar a Perfumería →</strong>
+          </div>
+          <div class="cat-portal-card" onclick="switchPageView('tech')">
+            <div>
+              <span class="badge badge-emerald">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                Audio & Tech
+              </span>
+              <h3 style="font-size:1.35rem; font-weight:800; margin:12px 0 4px;">Tecnología</h3>
+              <p style="font-size:0.84rem; color:var(--muted);">Auriculares inalámbricos y accesorios seleccionados.</p>
+            </div>
+            <strong style="font-size:0.84rem; margin-top:16px;">Entrar a Tech →</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENTO GARANTÍA -->
+    <section class="bento-section">
+      <div class="wrap">
+        <div class="bento-grid">
+          <div class="bento-card">
+            <div class="bento-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+            <h4>Stock Cloud en Vivo</h4>
+            <p>Cada sabor y precio se sincroniza en tiempo real con nuestra base de datos.</p>
+          </div>
+          <div class="bento-card">
+            <div class="bento-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <h4>Entrega en el Día</h4>
+            <p>Envíos rápidos a domicilio dentro de La Rioja Capital por WhatsApp.</p>
+          </div>
+          <div class="bento-card">
+            <div class="bento-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <h4>100% Originales</h4>
+            <p>Vapers sellados de fábrica y fragancias árabes importadas.</p>
+          </div>
+          <div class="bento-card">
+            <div class="bento-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <h4>Atención Directa</h4>
+            <p>Armás tu carrito en la web y lo enviás directo a nuestro WhatsApp.</p>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- MODAL DETALLE VAPER -->
-  <div class="modal-overlay" id="product-modal">
-    <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">&times;</button>
-      <div class="modal-body" id="modal-body-content"></div>
-    </div>
-  </div>
-
-  <!-- CONSOLA / PANEL DE CONTROL (ADMIN MULTIRRUBRO) -->
-  <div class="admin-modal" id="adminModal">
-    <div class="admin-container">
-      <div class="admin-header">
-        <h3>⚡ Panel de Control Privado (Gestor Multirrubro)</h3>
-        <button class="small-btn" onclick="closeAdminPanel()">✕ Cerrar</button>
-      </div>
-
-      <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchAdminTab('stock', this)">📦 Gestión de Stock & Precios</button>
-        <button class="admin-tab" onclick="switchAdminTab('add', this)">➕ Agregar Nuevo Producto</button>
-      </div>
-
-      <div class="admin-body" id="adminBodyContent">
-        <!-- Contenido dinámico tab 1 o 2 -->
+  <!-- VIEW 3: VAPERS -->
+  <section class="page-view" id="view-vapers">
+    <div class="brand-strip-section">
+      <div class="wrap">
+        <div id="brand-chips-list" style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;"></div>
       </div>
     </div>
-  </div>
 
+    <div class="catalog-section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Stock en Tiempo Real</div>
+            <h2 class="section-title">Catálogo de Vapers</h2>
+          </div>
+          <span id="vapers-count-label" style="font-size:0.85rem; color:var(--muted); font-weight:600;"></span>
+        </div>
+
+        <div class="catalog-layout">
+          <aside class="filter-sidebar">
+            <div class="filter-group">
+              <label class="filter-label">Capacidad (Puffs)</label>
+              <div class="filter-pills" id="puffs-filter-pills">
+                <button class="f-pill active" onclick="filterVaperPuffs('all', this)">Todos</button>
+                <button class="f-pill" onclick="filterVaperPuffs('10k-20k', this)">10K – 20K</button>
+                <button class="f-pill" onclick="filterVaperPuffs('23k-35k', this)">23K – 35K</button>
+                <button class="f-pill" onclick="filterVaperPuffs('40k-plus', this)">40K – 100K</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Disponibilidad</label>
+              <div class="filter-pills">
+                <button class="f-pill active" id="stock-only-all" onclick="setExtraFilter('all', this)">Todos</button>
+                <button class="f-pill" id="stock-only-avail" onclick="setExtraFilter('avail', this)">En Stock</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="sort-vapers">Ordenar por</label>
+              <select class="filter-select" id="sort-vapers" onchange="renderVapers()">
+                <option value="default">Destacados</option>
+                <option value="price-asc">Menor precio</option>
+                <option value="price-desc">Mayor precio</option>
+                <option value="flavors-desc">Más sabores disponibles</option>
+              </select>
+            </div>
+            <button class="btn btn-outline" style="width:100%; padding:9px; font-size:0.8rem;" onclick="resetAllFilters()">Limpiar Filtros</button>
+          </aside>
+
+          <div class="product-grid" id="vaper-grid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 4: PERFUMES -->
+  <section class="page-view" id="view-perfumes">
+    <div class="catalog-section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Fragancias Importadas</div>
+            <h2 class="section-title">Perfumería Árabe & <span class="serif" style="color:var(--gold); font-style:italic; font-weight:400;">Diseñador</span></h2>
+          </div>
+          <div class="filter-pills">
+            <button class="f-pill active" onclick="filterPerfumes('all', this)">Todos</button>
+            <button class="f-pill" onclick="filterPerfumes('masculino', this)">Masculinos</button>
+            <button class="f-pill" onclick="filterPerfumes('femenino', this)">Femeninos</button>
+            <button class="f-pill" onclick="filterPerfumes('unisex', this)">Unisex</button>
+          </div>
+        </div>
+        <div class="product-grid" id="perfume-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 5: TECH -->
+  <section class="page-view" id="view-tech">
+    <div class="catalog-section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Audio & Accesorios</div>
+            <h2 class="section-title">Tecnología Seleccionada</h2>
+          </div>
+        </div>
+        <div class="product-grid" id="tech-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 6: BÚSQUEDA GLOBAL -->
+  <section class="page-view" id="view-search">
+    <div class="catalog-section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Buscador en Vivo</div>
+            <h2 class="section-title" id="search-results-title">Resultados</h2>
+          </div>
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:0.82rem;" onclick="clearGlobalSearch()">✕ Limpiar búsqueda</button>
+        </div>
+        <div class="product-grid" id="search-results-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CON CRÉDITOS G.A. CENTER -->
   <footer>
-    <div class="wrap footer-row">
-      <span>© <span id="year"></span> N&G IMPORTADOS — Perfumes, Vapers & AirPods</span>
-      <div>
-        <span>Envío a domicilio en La Rioja</span>
-        <button class="admin-footer-btn" onclick="openAdminPanel()">⚙️ Admin</button>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <img src="logo-ng.jpg" alt="N&G Importados" style="width:42px; height:42px; border-radius:10px; object-fit:cover; border:1px solid var(--border-strong);" />
+            <div class="brand-logo">N&G <span>IMPORTADOS</span></div>
+          </div>
+          <p style="font-size:0.85rem; color:var(--muted); max-width:360px; margin-bottom:14px;">
+            Tienda multirrubro en La Rioja Capital especializada en Vapers descartables de alta capacidad, Perfumería Árabe y Tecnología.
+          </p>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.82rem; color:var(--ink-2);">
+            <span style="display:inline-flex; align-items:center; gap:7px;">
+              <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Lun-Sáb: 10:30-13:30 | 17:00-22:00
+            </span>
+            <a href="https://www.instagram.com/nyg.importados/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:7px; color:var(--ink); font-weight:700; text-decoration:none; width:fit-content;">
+              <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram: @nyg.importados
+            </a>
+          </div>
+        </div>
+        <div>
+          <strong style="font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em;">Categorías</strong>
+          <div style="display:grid; gap:6px; margin-top:10px; font-size:0.85rem;">
+            <a href="javascript:void(0)" onclick="switchPageView('inicio')" style="color:var(--ink-2); text-decoration:none;">Inicio</a>
+            <a href="javascript:void(0)" onclick="switchPageView('vapers')" style="color:var(--ink-2); text-decoration:none;">Catálogo Vapers</a>
+            <a href="javascript:void(0)" onclick="switchPageView('perfumes')" style="color:var(--ink-2); text-decoration:none;">Perfumería</a>
+            <a href="javascript:void(0)" onclick="switchPageView('tech')" style="color:var(--ink-2); text-decoration:none;">Tecnología</a>
+          </div>
+        </div>
+        <div>
+          <strong style="font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em;">Créditos & Stack</strong>
+          <p style="font-size:0.82rem; color:var(--muted); margin-top:10px;">
+            Diseño & Desarrollo Web por <strong style="color:var(--ink);">G.A. CENTER</strong>
+          </p>
+          <div class="skill-tags">
+            <span class="skill-tag">UI/UX Editorial</span>
+            <span class="skill-tag">Supabase Cloud</span>
+            <span class="skill-tag">Supabase Storage</span>
+            <span class="skill-tag">Swiper.js</span>
+            <span class="skill-tag">WhatsApp Checkout</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> N&G IMPORTADOS — Todos los derechos reservados</span>
+        <span>La Rioja, Argentina</span>
       </div>
     </div>
   </footer>
 
+  <!-- MODAL DETALLE VAPER -->
+  <div class="modal-backdrop" id="product-modal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-body-content"></div>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-head">
+      <div>
+        <strong style="font-size:1.05rem;">Tu Pedido</strong>
+        <div style="font-size:0.75rem; color:var(--muted);">Envío directo por WhatsApp</div>
+      </div>
+      <button class="modal-close" style="position:static;" onclick="toggleCart(false)">✕</button>
+    </div>
+    <div class="cart-items" id="cartItemsList"></div>
+    <div class="cart-foot">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:0.88rem; color:var(--muted); font-weight:600;">Total estimado</span>
+        <strong style="font-size:1.25rem;" id="cartTotalText">$0</strong>
+      </div>
+      <button class="btn btn-emerald" style="width:100%; margin-bottom:8px;" onclick="checkoutWhatsApp()">Enviar Pedido por WhatsApp ↗</button>
+      <button class="btn btn-outline" style="width:100%; padding:9px; font-size:0.8rem;" onclick="clearCart()">Vaciar Carrito</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- SWIPER JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
   <script>
+    const SUPABASE_URL = 'https://sbeufnrduosqlrbepaan.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_dfidJ8KQ1EyJaFAj34DfrA_H0jgTbNk';
+    const WHATSAPP_NUMBER = '5493804148332';
+    const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
     document.getElementById('year').textContent = new Date().getFullYear();
-    const WHATSAPP_NUMBER = "5493804148332";
 
-    // MENÚ HAMBURGUESA
-    const menuBtn = document.getElementById('menuBtn');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    menuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownMenu.classList.toggle('show');
-    });
-    document.addEventListener('click', () => { dropdownMenu.classList.remove('show'); });
+    let vapersProducts = [];
+    let perfumesProducts = [];
+    let techProducts = [];
+    let cart = JSON.parse(localStorage.getItem('ng_cart_v2') || '[]');
 
-    // BASES DE DATOS INICIALES COMPLETAS
+    let currentView = 'inicio';
+    let globalSearchQuery = '';
+    let activeVaperFilters = { brand: 'all', puffs: 'all', extra: 'all' };
+    let activePerfumeCategory = 'all';
 
-    const defaultPerfumes = [
-      { id: "p1", tag: "Unisex · Lattafa", title: "Honor and Glory", desc: "Notas cálidas, gourmand con piña, crema y especias.", price: "$45.000", img: "honor and glory.png", category: "unisex" },
-      { id: "p2", tag: "Unisex · French Avenue", title: "Liquid Brun", desc: "Una bomba avainillada, cálida, dulce y achocolatada.", price: "$45.000", img: "liquid brun.png", category: "unisex" },
-      { id: "p3", tag: "Masculino · Afnan", title: "9pm Night Out", desc: "Fragancia nocturna, seductora y de gran estela.", price: "$50.000", img: "9pm night out.png", category: "masculino" },
-      { id: "p4", tag: "Masculino · Jean Paul Gaultier", title: "Jean Paul Gaultier Le Beau Le Parfum", desc: "Perfil tropical e intenso con notas de coco y haba tonka.", price: "$55.000", img: "JPG le beau.png", category: "masculino" },
-      { id: "p5", tag: "Masculino · Jean Paul Gaultier", title: "Jean Paul Gaultier Le Male Le Parfum", desc: "Elegancia oscura con cardamomo, lavanda y iris oriental.", price: "$55.000", img: "JPG le male le parfum.png", category: "masculino" },
-      { id: "p6", tag: "Unisex · Xerjoff", title: "Erba Pura", desc: "Explosión de frutas mediterráneas, cítricos y almizcle blanco.", price: "$50.000", img: "erba pura.png", category: "unisex" },
-      { id: "p7", tag: "Masculino · Armaf", title: "Odyssey Aqua", desc: "Aroma fresco, marino y vibrante, ideal para uso diario.", price: "$40.000", img: "odyssey aqua.png", category: "masculino" },
-      { id: "p8", tag: "Masculino · Armaf", title: "Odyssey Homme", desc: "Fragancia ámbar amaderada con toque de iris y vainilla.", price: "$40.000", img: "odyssey homme.png", category: "masculino" },
-      { id: "p9", tag: "Femenino · Barara King", title: "Barara Rose", desc: "Elegante combinación floral dulce y femenina.", price: "$55.000", img: "barara rose.png", category: "femenino" },
-      { id: "p10", tag: "Masculino · Barara King", title: "Barara King Gold Edición", desc: "Perfume ostentoso, amaderado y especia dorada.", price: "$55.000", img: "bharara gold.png", category: "masculino" },
-      { id: "p11", tag: "Unisex · Lattafa", title: "Khamrah", desc: "Especias cálidas, canela, praliné y haba tonka dulce.", price: "$48.000", img: "khamrah.png", category: "unisex" },
-      { id: "p12", tag: "Unisex · Lattafa", title: "Khamrah Qahwa", desc: "Gourmand intenso con notas de café arábigo tostado.", price: "$48.000", img: "qahwa.png", category: "unisex" },
-      { id: "p13", tag: "Masculino · Armaf", title: "Odyssey Mandarín Sky", desc: "Toques cítricos dulces de mandarina, caramelo y haba tonka.", price: "$41.000", img: "mandarin sky.png", category: "masculino" },
-      { id: "p14", tag: "Masculino · Armaf", title: "Odyssey Mandarín Sky Elíxir", desc: "Versión más profunda y concentrada con acordes ambarados y especiados.", price: "$41.000", img: "mandarin sky elixir.png", category: "masculino" },
-      { id: "p15", tag: "Femenino · Armaf", title: "Odyssey Candee", desc: "Perfil dulce, frutal y jovial con notas acarameladas.", price: "$41.000", img: "candee.png", category: "femenino" },
-      { id: "p16", tag: "Masculino · Rasasi", title: "Hawas Ice", desc: "Fragancia acuática ultra helada, frutal y enérgica.", price: "$40.000", img: "hawas ice.png", category: "masculino" },
-      { id: "p17", tag: "Unisex · French Avenue", title: "Azzure Aoud", desc: "Combinación exótica de Oud con toques marinos refrescantes.", price: "$45.000", img: "azzure aoud.png", category: "unisex" },
-      { id: "p18", tag: "Femenino · Lattafa", title: "Yara", desc: "Aroma cremoso con notas de orquídea, vainilla y frutas atalcadas.", price: "$30.000", img: "yara.png", category: "femenino" },
-      { id: "p19", tag: "Unisex · Afnan", title: "9am", desc: "Fresco, cítrico y enérgico, perfecto para arrancar el día con vitalidad.", price: "$37.000", img: "9am.png", category: "unisex" },
-      { id: "p20", tag: "Unisex · Afnan", title: "9pm", desc: "Versatilidad total entre frescura diurna y toque nocturno.", price: "$37.000", img: "9pm.png", category: "unisex" },
-      { id: "p21", tag: "Unisex · Xerjoff", title: "Xerjoff Naxos", desc: "Dulce, frutal y avainillada con un fondo seductor ideal para salidas nocturnas.", price: "$55.000", img: "naxos.png", category: "unisex" },
-      { id: "p22", tag: "Masculino · Maison Alhambra", title: "Vulcan", desc: "Perfume imponente con notas de cuero, especias y madera.", price: "$47.000", img: "vulcan.png", category: "masculino" },
-      { id: "p23", tag: "Masculino · Maison Alhambra", title: "Vulcan Feu", desc: "Edición cálida e intensa con toques ahumados y resinosos.", price: "$47.000", img: "vulcan feu.png", category: "masculino" },
-      { id: "p24", tag: "Masculino · Lattafa", title: "Asad Bourbon", desc: "Notas licorosas, vainilla especiada y madera ahumada.", price: "$37.000", img: "asad bourbon.png", category: "masculino" },
-      { id: "p25", tag: "Masculino · Lattafa", title: "Asad", desc: "Especias oscuras, pimienta negra, ámbar y café.", price: "$35.000", img: "asad.png", category: "masculino" },
-      { id: "p26", tag: "Unisex · Lattafa", title: "Oud for Glory", desc: "Azafrán, maderas finas y Oud oriental opulento.", price: "$45.000", img: "oud for glory.png", category: "unisex" },
-      { id: "p27", tag: "Masculino · Lattafa", title: "Fakhar Black", desc: "Perfume elegancia pura, aromático con manzana y salvia.", price: "$43.000", img: "fakhar.png", category: "masculino" }
-    ];
+    let currentProduct = null;
+    let currentSelectedFlavor = '';
 
-    const defaultTech = [
-      { id: "t1", tag: "Audio · Inalámbrico", title: "AirPods Pro 2", desc: "Diseño anatómico, audio espacial con seguimiento dinámico de la cabeza y estuche de carga Lightning/MagSafe.", price: "$26.000", img: "airpods.png" }
-    ];
+    let heroSwiperInstance = null;
+    let brandSwiperInstance = null;
+    let promoSwiperInstance = null;
 
-    const defaultVapers = [
-      {
-        id: "dinner-lady-20k", brandName: "Dinner Lady", brandKey: "dinner-lady", model: "Dinner Lady LUMA 20K", puffsKey: "20k", puffsText: "20.000 Puffs", price: "$25.000", pricePromo: "2X $46.000", defaultImg: "LADY.png",
-        flavors: [
-          { name: "Sandía Fría", soldOut: false, img: "sandia.png" },
-          { name: "Menta Azul", soldOut: false, img: "menta.png" },
-          { name: "Uva Fría", soldOut: false, img: "uva.png" },
-          { name: "Ananá Fría", soldOut: false, img: "anana.png" },
-          { name: "Menta Fría", soldOut: false, img: "mentafria.png" },
-          { name: "Mango Frío", soldOut: false, img: "mango.png" },
-          { name: "Durazno Mango y Sandía", soldOut: false, img: "duraznomangosandia.png" },
-          { name: "Menthol", soldOut: false, img: "menthol.png" },
-          { name: "Manzana Durazno", soldOut: false, img: "manzanadurazno.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "frutillafria.png" },
-          { name: "Cerezas Frías", soldOut: false, img: "cereza.png" },
-          { name: "Banana Fría", soldOut: false, img: "banana.png" },
-          { name: "Maracuyá Frío", soldOut: false, img: "maracuya.png" },
-          { name: "Kiwi con Maracuyá", soldOut: false, img: "kiwimaracuya.png" }
-        ]
-      },
-      {
-        id: "nikbar-10k", brandName: "Nikbar", brandKey: "nikbar", model: "Nikbar 10K", puffsKey: "10k", puffsText: "10.000 Puffs", price: "$22.500", pricePromo: "2X $40.000", defaultImg: "nikbar 10k.png",
-        flavors: [
-          { name: "Cherry Bomb (Cereza y Uva / Cerezas Dulces)", soldOut: true, img: "cherrybomb.png" },
-          { name: "Juicy Peach (Durazno)", soldOut: false, img: "juicypeach.png" },
-          { name: "Passion Sour Kiwi (Maracuyá con Kiwi)", soldOut: false, img: "passionsourkiwi.png" },
-          { name: "Aloe Grape (Uva y Aloe)", soldOut: false, img: "aloegrape.png" },
-          { name: "Blueberry Ice (Arándanos Fríos)", soldOut: false, img: "blueberryice.png" },
-          { name: "Grape Ice (Uva Fría)", soldOut: true, img: "grapeice.png" },
-          { name: "Watermelon Ice (Sandía Fría)", soldOut: false, img: "watermelonice.png" },
-          { name: "Blueberry Raspberry (Arándanos con Frambuesas)", soldOut: true, img: "blueberryraspberry.png" },
-          { name: "Grape (Uva Frutilla)", soldOut: false, img: "grapefrutilla.png" },
-          { name: "Tarta de Frutilla", soldOut: false, img: "tartadefrutilla.png" },
-          { name: "Fresh Mint (Menta Fría)", soldOut: false, img: "freshmint.png" },
-          { name: "Strawberry Kiwi (Frutilla con Kiwi)", soldOut: false, img: "strawberrykiwi.png" },
-          { name: "Frutilla con Frambuesas", soldOut: false, img: "frutillaframbuesas.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "frutillanik.png" },
-          { name: "Frutilla, Manzana y Sandía", soldOut: false, img: "frutillamanzanasandia.png" },
-          { name: "Pineapple Ice (Ananá Fría)", soldOut: true, img: "pineappleice.png" },
-          { name: "Chicle de Sandía", soldOut: false, img: "chicledesandia.png" }
-        ]
-      },
-      {
-        id: "maskking-40k", brandName: "Maskking", brandKey: "maskking", model: "Maskking Puff 40K", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$29.000", pricePromo: "2X $55.000", defaultImg: "mk 40k.png",
-        flavors: [
-          { name: "Cereza Negra y Durazno", soldOut: false, img: "cerezanegradurazno.png" },
-          { name: "Arándanos con Frambuesas", soldOut: true, img: "arandanosframbuesas.png" },
-          { name: "Mango con Maracuyá", soldOut: true, img: "mangomaracuya.png" },
-          { name: "Frutilla Kiwi", soldOut: true, img: "frutillakiwi.png" },
-          { name: "Uva Fría", soldOut: true , img: "uvafria.png" },
-          { name: "Café Expresso", soldOut: false, img: "cafeexpresso.png" },
-          { name: "Frutos Rojos", soldOut: true, img: "frutosrojos.png" },
-          { name: "Café con Menta", soldOut: true, img: "cafeconmenta.png" },
-          { name: "Frutilla Sandía", soldOut: true, img: "frutillasandia.png" },
-          { name: "Helado de Vainilla", soldOut: false, img: "heladovainilla.png" },
-          { name: "Manzana Pera", soldOut: true, img: "manzanapera.png" },
-          { name: "Menthol (ICEX)", soldOut: true, img: "mentholicex.png" },
-          { name: "Pomelo Ácido (ICEX)", soldOut: false, img: "pomeloacidoicex.png" },
-          { name: "Frutilla Ácida (ICEX)", soldOut: false, img: "frutillaacidaicex.png" },
-          { name: "Triple Frutos Rojos (ICEX)", soldOut: false, img: "triplefrutosicex.png" },
-          { name: "Tabaco Rubio (ICEX)", soldOut: false, img: "tabacorubioicex.png" },
-          { name: "Cereza con Cola (ICEX)", soldOut: false, img: "cerezacolaicex.png" },
-          { name: "Chicle de Menta (ICEX)", soldOut: false, img: "chiclementaicex.png" }
-        ]
-      },
-      {
-        id: "maskking-100k", brandName: "Maskking", brandKey: "maskking", model: "Maskking Puff 100K", puffsKey: "100k", puffsText: "100.000 Puffs", price: "$34.000", pricePromo: "2X $62.000", defaultImg: "mk 100k.png",
-        flavors: [
-          { name: "Taffy Freeze (Banana Dulce Fría)", soldOut: true, img: "taffyfreeze.png" },
-          { name: "Watermelon Ice (Sandía Fría)", soldOut: false, img: "watermelonicee.png" },
-          { name: "Alaska Ice (Menta Fría)", soldOut: false, img: "alaskaice.png" },
-          { name: "Uva Dulce Fría", soldOut: true, img: "uvadulcefria.png" },
-          { name: "Chicle de Menta", soldOut: true, img: "chiclementa.png" },
-          { name: "Juicy Peach (Jugo de Durazno Frío)", soldOut: false, img: "juicypeachh.png" },
-          { name: "Frozen Piña Colada", soldOut: false, img: "frozenpinacolada.png" },
-          { name: "Naranja, Mango y Uva Fría", soldOut: false, img: "naranjamangouva.png" },
-          { name: "Strawberry (Frutilla Intensa)", soldOut: false, img: "strawberry.png" },
-          { name: "Gomitas Frías", soldOut: true, img: "gomitasfrias.png" },
-          { name: "Frutilla con Sandía", soldOut: true, img: "frutillasandia.png" },
-          { name: "Mango Mexicano", soldOut: true, img: "mangomexicano.png" },
-          { name: "Sour Apple Ice (Manzana Ácida Fría)", soldOut: false, img: "sourappleice.png" },
-          { name: "Arándanos con Frambuesas", soldOut: true, img: "arandanosframbuesasmk.png" },
-          { name: "Fruity Cool Strawberry (Caramelo de Frutilla)", soldOut: false, img: "fruitystrawberry.png" }
-        ]
-      },
-      {
-        id: "ignite-v155", brandName: "Ignite", brandKey: "ignite", model: "Ignite V155", puffsKey: "15k", puffsText: "15.500 Puffs", price: "$24.500", pricePromo: "2X $46.000", defaultImg: "ingnite v155.png",
-        flavors: [
-          { name: "Blueberry Ice (Arándanos Fríos)", soldOut: true, img: "blueberryiceig.png" },
-          { name: "Strawberry Ice (Frutilla Fría)", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Passion Fruit Kiwi (Kiwi con Maracuyá)", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Strawberry Kiwi (Frutilla con Kiwi)", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Strawberry Banana (Frutilla con Banana)", soldOut: true, img: "blueberryiceig.png" },
-          { name: "Grape Ice (Uva Fría)", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Watermelon Ice (Sandía Fría)", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Strawberry Watermelon (Frutilla con Sandía)", soldOut: true, img: "blueberryiceig.png" },
-          { name: "Banana Ice (Banana Fría)", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Sour Apple (Manzana Verde)", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Menta Fría", soldOut: true, img: "blueberryiceig.png" },
-          { name: "Menthol", soldOut: false, img: "blueberryiceig.png" },
-          { name: "Pineapple Ice (Ananá Fría)", soldOut: false, img: "blueberryiceig.png" }
-        ]
-      },
-      {
-        id: "ignite-v300", brandName: "Ignite", brandKey: "ignite", model: "Ignite V300", puffsKey: "30k", puffsText: "30.000 Puffs", price: "$30.000", pricePromo: "2X $55.000", defaultImg: "ingnite v300.png",
-        flavors: [
-          { name: "Menthol", soldOut: false, img: "igv300sab.png" },
-          { name: "Mix de Sandía", soldOut: false, img: "igv300sab.png" },
-          { name: "Arándanos, Frutilla y Coco", soldOut: false, img: "igv300sab.png" },
-          { name: "Menta Melón", soldOut: false, img: "igv300sab.png" },
-          { name: "Lima y Cactus", soldOut: false, img: "igv300sab.png" },
-          { name: "Uva Fría", soldOut: false, img: "igv300sab.png" },
-          { name: "Ananá Mango", soldOut: true, img: "igv300sab.png" },
-          { name: "Ananá Fría", soldOut: false, img: "igv300sab.png" },
-          { name: "Sandía y Fruta del Dragón", soldOut: true, img: "igv300sab.png" },
-          { name: "Sandía Fría", soldOut: false, img: "igv300sab.png" },
-          { name: "Frutilla con Kiwi", soldOut: false, img: "igv300sab.png" },
-          { name: "Banana Fría", soldOut: false, img: "igv300sab.png" },
-          { name: "Frutilla con Banana", soldOut: false, img: "igv300sab.png" },
-          { name: "Banana Coco", soldOut: false, img: "igv300sab.png" },
-          { name: "Pomelo Ácido", soldOut: false, img: "igv300sab.png" },
-          { name: "Arándanos Fríos", soldOut: false, img: "igv300sab.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "igv300sab.png" },
-          { name: "Menta Fría", soldOut: false, img: "igv300sab.png" },
-          { name: "Ananá, Kiwi y Fruta del Dragón", soldOut: false, img: "igv300sab.png" },
-          { name: "Manzana Verde", soldOut: true, img: "igv300sab.png" },
-          { name: "Uva Aloe", soldOut: false, img: "ig40ksab.png" }
-        ]
-      },
-      {
-        id: "ignite-ice-40k", brandName: "Ignite", brandKey: "ignite", model: "Ignite ICE 40K", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$32.000", pricePromo: "2X $58.000", defaultImg: "ingnite 40 ice.png",
-        flavors: [
-          { name: "Grape Peach (Uva Durazno)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Strawberry Kiwi (Frutilla Kiwi)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Peach (Durazno)", soldOut: true, img: "ig40ksab.png" },
-          { name: "Lima Limón", soldOut: true, img: "ig40ksab.png" },
-          { name: "Mango", soldOut: true, img: "ig40ksab.png" },
-          { name: "Strawberry Watermelon (Frutilla Sandía)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Menthol", soldOut: false, img: "ig40ksab.png" },
-          { name: "Raspberry (Frambuesas)", soldOut: true, img: "ig40ksab.png" },
-          { name: "Menta", soldOut: true, img: "ig40ksab.png" },
-          { name: "Blueberry (Arándanos)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Strawberry Ice (Frutilla)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Watermelon (Sandía)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Grape (Uva)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Blue Razz Lemon (Frambuesas Azules con Limón)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Strawberry Apple Watermelon (Frutilla Manzana y Sandía)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Strawberry Banana Ice (Frutilla con Banana)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Pineapple Ice (Ananá Fría)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Sakura Grape (Cereza con Uva)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Passion Fruit Sour Kiwi (Kiwi con Maracuyá)", soldOut: false, img: "ig40ksab.png" },
-          { name: "Pineapple Kiwi Dragonfruit (Ananá Kiwi y Fruta del Dragón)", soldOut: false, img: "ig40ksab.png" }
-        ]
-      },
-      {
-        id: "ignite-mix-40k", brandName: "Ignite", brandKey: "ignite", model: "Ignite MIX 40K", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$33.000", pricePromo: "2X $60.000", defaultImg: "ingnite 40k mix.png",
-        flavors: [
-          { name: "Banana Ice / Strawberry (Frutilla-Banana)", soldOut: false, img: "igmix40kamarillo.png" },
-          { name: "Icy Mint / Peach Grape (Menta-Durazno Uva)", soldOut: false, img: "icymintpeach.png" },
-          { name: "Manzana-Sandía Frutilla", soldOut: false, img: "igmix40krosafuerte.png" },
-          { name: "Blue Grape / Uva-Sandía Frutilla", soldOut: false, img: "igmix40krosafuerte.png" },
-          { name: "Grape Ice / Strawberry (Uva-Frutilla)", soldOut: false, img: "igmix40kmorado.png" },
-          { name: "Passion Fruit / Pineapple Ice (Ananá-Kiwi con Maracuyá)", soldOut: false, img: "igmix40kceleste.png" },
-          { name: "Grape Ice / Acai Ice (Uva Sandía-Acai)", soldOut: false, img: "igmix40kmorado.png" },
-          { name: "Peach / Mango Ice (Durazno Sandía Mango)", soldOut: false, img: "igmix40krosafuerte.png" },
-          { name: "Cherry Ice (Sandía-Cereza)", soldOut: false, img: "igmix40krosafuerte.png" },
-          { name: "Passion Fruit Guava / Mango Ice (Mango-Maracuyá)", soldOut: false, img: "igmix40knaranja.png" },
-          { name: "Pineapple / Mango Ice (Ananá Mango Frutilla)", soldOut: false, img: "igmix40kamarillo.png" },
-          { name: "Strawberry Mango Ice / Banana Ice (Frutilla Mango Banana)", soldOut: false, img: "igmix40kamarillo.png" },
-          { name: "Grape Pop / Peach Ice (Uva-Durazno)", soldOut: false, img: "igmix40kmorado.png" },
-          { name: "Naranja Frutilla", soldOut: false, img: "igmix40knaranja.png" },
-          { name: "Melón Dulce y Mentol", soldOut: false, img: "igmix40kceleste.png" },
-          { name: "Arándanos Frambuesas con Moras", soldOut: false, img: "igmix40kazul.png" }
-        ]
-      },
-      {
-        id: "ignite-v500", brandName: "Ignite", brandKey: "ignite", model: "Ignite V500", puffsKey: "50k", puffsText: "50.000 Puffs", price: "$35.000", pricePromo: "2X $65.000", defaultImg: "ingnite v500.png",
-        flavors: [
-          { name: "Mix Sandía", soldOut: false, img: "mixsandia.png" },
-          { name: "Durazno Uva", soldOut: false, img: "duraznouva.png" },
-          { name: "Arándanos Fríos", soldOut: true, img: "arandanosfrios.png" },
-          { name: "Mango Maracuyá", soldOut: false, img: "mangomaracuya.png" },
-          { name: "Menta Fría", soldOut: false, img: "mentafria.png" },
-          { name: "Ananá Fría", soldOut: false, img: "ananafria.png" },
-          { name: "Sandía Frutilla", soldOut: false, img: "sandiafrutilla.png" },
-          { name: "Sandía Kiwi", soldOut: false, img: "sandiakiwi.png" },
-          { name: "Ananá Mango", soldOut: false, img: "ananamango.png" },
-          { name: "Manzana Durazno y Kiwi", soldOut: false, img: "manzanaduraznokiwi.png" },
-          { name: "Kiwi Acai", soldOut: false, img: "kiwiacai.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "frutillafria.png" },
-          { name: "Menthol", soldOut: false, img: "menthol.png" },
-          { name: "Uva Fría", soldOut: false, img: "uvafria.png" },
-          { name: "Frutilla Kiwi", soldOut: false, img: "frutillakiwi.png" },
-          { name: "Frutilla Banana", soldOut: false, img: "frutillabanana.png" },
-          { name: "Sandía Fría", soldOut: false, img: "sandiafria.png" },
-          { name: "Manzana Verde", soldOut: false, img: "manzanaverde.png" },
-          { name: "Frutilla Manzana y Sandía", soldOut: false, img: "frutillamanzanasandia.png" },
-          { name: "Banana Cereza", soldOut: false, img: "bananacereza.png" }
-        ]
-      },
-      {
-        id: "elfbar-bc15k", brandName: "Elfbar", brandKey: "elfbar", model: "Elfbar BC15K", puffsKey: "15k", puffsText: "15.000 Puffs", price: "$22.000", pricePromo: "2X $40.000", defaultImg: "eb bc15.png",
-        flavors: [
-          { name: "Uva", soldOut: true, img: "uva.png" },
-          { name: "Chicle de Menta", soldOut: false, img: "chiclementa.png" },
-          { name: "Arándanos con Frambuesas", soldOut: true, img: "arandanosframbuesas.png" },
-          { name: "Kiwi Sandía y Manzana", soldOut: false, img: "kiwisandiamanzana.png" },
-          { name: "Pomelo con Lima", soldOut: false, img: "pomelolima.png" },
-          { name: "Manzana Fría", soldOut: false, img: "manzanafria.png" },
-          { name: "Kiwi con Maracuyá", soldOut: false, img: "kiwimaracuya.png" },
-          { name: "Sandía Fría", soldOut: true, img: "sandiafria.png" },
-          { name: "Menta Fría", soldOut: false, img: "mentafria.png" },
-          { name: "Durazno Mango y Sandía", soldOut: false, img: "duraznomangosandia.png" },
-          { name: "Frutilla con Kiwi", soldOut: false, img: "frutillakiwi.png" },
-          { name: "Cereza con Uva", soldOut: false, img: "cerezauva.png" },
-          { name: "Triple Frutos Rojos", soldOut: true, img: "triplefrutos.png" },
-          { name: "Chicle de Uva", soldOut: true, img: "chicleuva.png" },
-          { name: "Maracuyá, Naranja y Guava", soldOut: true, img: "maracuyanaranjaguava.png" },
-          { name: "Café Americano Frío", soldOut: false, img: "cafeamericano.png" },
-          { name: "Chupetín Tropical", soldOut: true, img: "chupetintropical.png" },
-          { name: "Ananá Fría", soldOut: true, img: "ananafria.png" },
-          { name: "Pera, Sandía y Fruta del Dragón", soldOut: false, img: "perasandiadragon.png" },
-          { name: "Frutilla con Crema Fría", soldOut: false, img: "frutillacrema.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "frutillafria.png" },
-          { name: "Mango", soldOut: false, img: "mango.png" },
-          { name: "Arándanos Frío", soldOut: true, img: "arandanosfrio.png" },
-          { name: "Limonada Tropical", soldOut: false, img: "limonadatropical.png" },
-          { name: "Frutilla y Sandía", soldOut: false, img: "frutillasandia.png" }
-        ]
-      },
-      {
-        id: "elfbar-gh23000", brandName: "Elfbar", brandKey: "elfbar", model: "Elfbar GH23000", puffsKey: "23k", puffsText: "23.000 Puffs", price: "$26.000", pricePromo: "2X $48.000", defaultImg: "eb 23.png",
-        flavors: [
-          { name: "Arándanos con Pera", soldOut: true, img: "arandanospera.png" },
-          { name: "Pomelo con Lima", soldOut: true, img: "pomelolima.png" },
-          { name: "Uva con Cerezas", soldOut: false, img: "uvacerezas.png" },
-          { name: "Chicle de Menta", soldOut: true, img: "chiclementa.png" },
-          { name: "Frutillas Frías", soldOut: true, img: "frutillasfrias.png" },
-          { name: "Ananá Lima y Menta", soldOut: true, img: "ananalimamenta.png" },
-          { name: "Grape Ice (Uva Fría)", soldOut: false, img: "grapeice.png" },
-          { name: "Kiwi con Fruta del Dragón", soldOut: true, img: "kiwidragon.png" },
-          { name: "Arándanos Lima y Menta", soldOut: true, img: "arandanoslimamenta.png" },
-          { name: "Watermelon Ice (Sandía Fría)", soldOut: false, img: "watermelonice.png" },
-          { name: "Green Apple Ice (Manzana Fría)", soldOut: false, img: "greenappleice.png" },
-          { name: "Menta Fría", soldOut: true, img: "mentafria.png" },
-          { name: "Arándanos con Frambuesas", soldOut: true, img: "arandanosframbuesas.png" },
-          { name: "Durazno Mango y Sandía", soldOut: true, img: "duraznomangosandia.png" },
-          { name: "Frutilla con Banana", soldOut: true, img: "frutillabanana.png" },
-          { name: "Menta", soldOut: false, img: "menta.png" }
-        ]
-      },
-      {
-        id: "elfbar-te30k", brandName: "Elfbar", brandKey: "elfbar", model: "Elfbar TE30K", puffsKey: "30k", puffsText: "30.000 Puffs", price: "$25.000", pricePromo: "2X $48.000", defaultImg: "eb te30.png",
-        flavors: [
-          { name: "Banana con Coco", soldOut: false, img: "bananacoco.png" },
-          { name: "Bubaloo de Tuti Fruti", soldOut: false, img: "bubalootuti.png" },
-          { name: "Sandía Fría", soldOut: true, img: "sandiafria.png" },
-          { name: "Frutilla Sandía y Durazno", soldOut: false, img: "frutillasandiadurazno.png" },
-          { name: "Arándanos Frío", soldOut: false, img: "arandanosfrio.png" },
-          { name: "Durazno, Mango y Sandía", soldOut: true, img: "duraznomangosandia.png" },
-          { name: "Banana con Acai", soldOut: true, img: "bananaacai.png" },
-          { name: "Ananá Mango", soldOut: true, img: "ananamango.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "frutillafria.png" },
-          { name: "Kiwi con Maracuyá", soldOut: false, img: "kiwimaracuya.png" },
-          { name: "Fruta del Dragón, Frutilla y Banana", soldOut: true, img: "frutadragon.png" },
-          { name: "Cereza con Frutilla", soldOut: false, img: "cerezafrutilla.png" },
-          { name: "Lima Pomelo", soldOut: true, img: "limapomelo.png" },
-          { name: "Bubaloo de Uva", soldOut: true, img: "bubalouva.png" },
-          { name: "Café Americano", soldOut: true, img: "cafeamericano.png" },
-          { name: "Sandía con Limón", soldOut: true, img: "sandialimon.png" },
-          { name: "Uva con Limón", soldOut: false, img: "uvalimon.png" },
-          { name: "Coco con Frutilla", soldOut: true, img: "cocofrutilla.png" },
-          { name: "Manzana con Limón", soldOut: false, img: "manzanalimon.png" }
-        ]
-      },
-      {
-        id: "elfbar-duke-35k", brandName: "Elfbar", brandKey: "elfbar", model: "Elfbar DUKE 35K", puffsKey: "35k", puffsText: "35.000 Puffs", price: "$28.500", pricePromo: "2X $52.000", defaultImg: "eb duke.png",
-        flavors: [
-          { name: "Ananá Fría", soldOut: false, img: "anaef.png" },
-          { name: "Menta Fría", soldOut: false, img: "mentef.png" },
-          { name: "Arándanos con Frambuesas", soldOut: true, img: "arandef.png" },
-          { name: "Uva Fría", soldOut: false, img: "uvef.png" },
-          { name: "Kiwi con Maracuyá", soldOut: false, img: "menef.png" },
-          { name: "Uva Fanta", soldOut: false, img: "uvef.png" },
-          { name: "Coco Frutilla Fría", soldOut: false, img: "cocef.png" },
-          { name: "Arándanos Fríos", soldOut: false, img: "arandef.png" },
-          { name: "Frutilla con Kiwi", soldOut: false, img: "sandef.png" },
-          { name: "Durazno Mango y Sandía", soldOut: false, img: "durazef.png" },
-          { name: "Mango", soldOut: false, img: "anaef.png" },
-          { name: "Sandía Limón", soldOut: false, img: "sandef.png" },
-          { name: "Chicle Tuti Fruti", soldOut: false, img: "cocef.png" },
-          { name: "Sandía Fría", soldOut: false, img: "samdef.png" },
-          { name: "Menthol", soldOut: false, img: "menef.png" }
-        ]
-      },
-      {
-        id: "elfbar-trio-40k", brandName: "Elfbar", brandKey: "elfbar", model: "Elfbar TRIO 40K", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$30.000", pricePromo: "2X $55.000", defaultImg: "eb trio.png",
-        flavors: [
-          { name: "Arándanos", soldOut: true, img: "arandanos.png" },
-          { name: "Uva", soldOut: false, img: "uva.png" },
-          { name: "Naranja", soldOut: true, img: "naranja.png" },
-          { name: "Manzana Ácida", soldOut: false, img: "manzanaacida.png" },
-          { name: "Uva Cereza", soldOut: false, img: "uvacereza.png" },
-          { name: "Arándanos con Frambuesas", soldOut: true, img: "arandanosframbuesas.png" },
-          { name: "Frutilla con Fruta del Dragón", soldOut: true, img: "frutilladragon.png" },
-          { name: "Durazno", soldOut: false, img: "durazno.png" },
-          { name: "Frambuesas con Sandía", soldOut: false, img: "frambuesassandia.png" },
-          { name: "Granada Dulce", soldOut: false, img: "granadadulce.png" },
-          { name: "Frutilla, Lima, Naranja", soldOut: false, img: "frutillalimanaranja.png" },
-          { name: "Lima con Ananá", soldOut: false, img: "limaanana.png" },
-          { name: "Frutos Rojos", soldOut: true, img: "frutosrojos.png" },
-          { name: "Menta Negra", soldOut: false, img: "mentanegra.png" },
-          { name: "Sandía Fría", soldOut: false, img: "sandiafria.png" },
-          { name: "Mentol Frío", soldOut: false, img: "mentolfrio.png" }
-        ]
-      },
-      {
-        id: "elfbar-iceking-40k", brandName: "Elfbar", brandKey: "elfbar", model: "Elfbar Iceking 40K", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$27.500", pricePromo: "2X $48.000", defaultImg: "eb iceking.png",
-        flavors: [
-          { name: "Gomita dulces", soldOut: false, img: "gomitef.png" },
-          { name: "Frambuesas azules", soldOut: false, img: "miamimint.png" },
-          { name: "Cerezas acidas", soldOut: false, img: "cerezaacidas.png" },
-          { name: "Frutilla, sandia y coco", soldOut: false, img: "peachef.png" },
-          { name: "Frutilla con fruta del dragon", soldOut: true, img: "gomitef.png" },
-          { name: "Sandia fria", soldOut: false, img: "cerezaacidas.png" },
-          { name: "Mango", soldOut: false, img: "mangoef.png" },
-          { name: "Sandia, limon y frutos del bosque", soldOut: false, img: "mangoef.png" },
-          { name: "Durazno", soldOut: false, img: "cerezaacidas.png" },
-          { name: "Frutilla fria", soldOut: false, img: "peachef.png" },
-          { name: "Manzana verde fria", soldOut: false, img: "manzanaverdefria.png" },
-          { name: "Cereza con frutilla", soldOut: false, img: "peachef.png" },
-          { name: "Sandia frutilla", soldOut: false, img: "cerezaacidas.png" },
-          { name: "Uva fria", soldOut: false, img: "gomitef.png" },
-          { name: "Manzana roja fria", soldOut: false, img: "mangoef.png" },
-          { name: "Frutilla, banana y fruta del dragon", soldOut: true, img: "mangoef.png" },
-          { name: "Chicle de menta", soldOut: false, img: "miamimint.png" },
-          { name: "Arandanos, menta y lima", soldOut: false, img: "miamimint.png" },
-          { name: "Durazno, mango y sandia", soldOut: true, img: "cerezaacidas.png" },
-          { name: "Moras con anana", soldOut: false, img: "peachef.png" },
-          { name: "Arandanos frios", soldOut: false, img: "arandanosef.png" },
-          { name: "Chicle tutti frutti", soldOut: false, img: "tuttief.png" },
-          { name: "Melon, uva y mentol", soldOut: false, img: "melonef.png" }
-        ]
-      },
-      {
-        id: "elfbar-summer-40k", brandName: "Elfbar", brandKey: "elfbar", model: "Elfbar 40K Edición Verano", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$28.000", pricePromo: "2X $50.000", defaultImg: "eb sum.png",
-        flavors: [
-          { name: "Maracuya", soldOut: true, img: "maracuya.png" },
-          { name: "Frutos silvestres", soldOut: true, img: "frutossilvestres.png" },
-          { name: "Giro de neon", soldOut: false, img: "gironeon.png" },
-          { name: "Durazno y arandanos", soldOut: false, img: "duraznoarandanos.png" },
-          { name: "Granizado hawaiano", soldOut: true, img: "granizadohawaiano.png" },
-          { name: "Frutos rojos", soldOut: true, img: "frutosrojos.png" },
-          { name: "Chispa de fresa", soldOut: true, img: "chispafresa.png" },
-          { name: "Granizado de cola", soldOut: false, img: "granizadocola.png" },
-          { name: "Manzana verde", soldOut: false, img: "manzanaverde.png" },
-          { name: "Menta negra", soldOut: false, img: "mentanegra.png" }
-        ]
-      },
-      {
-        id: "ebcreate-40k", brandName: "Elfbar", brandKey: "elfbar", model: "EBCreate 40K Puffs", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$28.000", pricePromo: "2X $50.000", defaultImg: "ebcreate.png",
-        flavors: [
-          { name: "Mix de Uvas", soldOut: false, img: "uvaef.png" },
-          { name: "Arándanos con Frambuesas", soldOut: false, img: "azuef.png" },
-          { name: "Moras con Uva", soldOut: false, img: "frutief.png" },
-          { name: "Frutos Tropicales", soldOut: false, img: "amarief.png" },
-          { name: "Frutos Rojos", soldOut: true, img: "celef.png" },
-          { name: "Frambuesas Dulce", soldOut: false, img: "grisef.png" },
-          { name: "Frutilla y Frambuesas", soldOut: false, img: "frutief.png" },
-          { name: "Sandía Fría", soldOut: false, img: "sandiaef.png" },
-          { name: "Caramelos Ácidos", soldOut: false, img: "veref.png" },
-          { name: "Mix de Frutilla", soldOut: false, img: "frutief.png" },
-          { name: "Ananá Tostado", soldOut: false, img: "amarief.png" },
-          { name: "Triple Frutos Rojos", soldOut: false, img: "uvaef.png" },
-          { name: "Frutilla Kiwi", soldOut: false, img: "frutief.png" },
-          { name: "Ananá con Granada", soldOut: false, img: "amarief.png" }
-        ]
-      },
-      {
-        id: "sex-addict-28k", brandName: "Sex Addict", brandKey: "sex-addict", model: "Sex Addict (Dan Bilzerian 28K)", puffsKey: "28k", puffsText: "28.000 Puffs", price: "$27.000", pricePromo: "2X $50.000", defaultImg: "sex.png",
-        flavors: [
-          { name: "Arándanos Fríos", soldOut: true, img: "arandanosfrios.png" },
-          { name: "Menthol", soldOut: true, img: "menthol.png" },
-          { name: "Kiwi con Maracuyá", soldOut: true, img: "kiwimaracuya.png" },
-          { name: "Uva con Kiwi", soldOut: true, img: "uvakiwi.png" },
-          { name: "Manzana Verde", soldOut: true, img: "manzanaverde.png" },
-          { name: "Menta Fría", soldOut: true, img: "mentafria.png" },
-          { name: "Uva con Acai", soldOut: true, img: "uvaacai.png" },
-          { name: "Uva Fría", soldOut: true, img: "uvafria.png" },
-          { name: "Banana Fría", soldOut: true, img: "bananafria.png" }
-        ]
-      },
-      {
-        id: "blvk-bar-45k", brandName: "BLVK Bar", brandKey: "blvk", model: "BLVK Bar 45K", puffsKey: "45k", puffsText: "45.000 Puffs", price: "$30.000", pricePromo: "2X $58.000", defaultImg: "blvk.png",
-        flavors: [
-          { name: "Frutilla con Kiwi", soldOut: false, img: "frutillakiwi.png" },
-          { name: "Uva Fría", soldOut: false, img: "uvafria.png" },
-          { name: "Manzana Dulce", soldOut: true, img: "manzanadulce.png" },
-          { name: "Menthol", soldOut: false, img: "menthol.png" },
-          { name: "Arándanos con Menta", soldOut: false, img: "arandanosmenta.png" },
-          { name: "Frutilla, Banana y Fruta del Dragón", soldOut: true, img: "frutillabananadragon.png" },
-          { name: "Kiwi con Maracuyá", soldOut: true, img: "kiwimaracuya.png" },
-          { name: "Menta Fría", soldOut: false, img: "mentafria.png" },
-          { name: "Frutilla con Mango", soldOut: true, img: "frutillamango.png" },
-          { name: "Sandía Fría", soldOut: false, img: "sandiafria.png" },
-          { name: "Manzana Verde", soldOut: false, img: "manzanaverde.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "frutillafria.png" },
-          { name: "Sandía con Frutilla", soldOut: false, img: "sandiafrutilla.png" }
-        ]
-      },
-      {
-        id: "lost-mary-20k", brandName: "Lost Mary", brandKey: "lost-mary", model: "Lost Mary Puff 20K", puffsKey: "20k", puffsText: "20.000 Puffs", price: "$28.000", pricePromo: "2X $50.000", defaultImg: "LM.png",
-        flavors: [
-          { name: "Sandía Fría", soldOut: false, img: "sandiafria.png" },
-          { name: "Ananá Limón", soldOut: false, img: "ananalimon.png" },
-          { name: "Frutilla, Sandía y Durazno", soldOut: false, img: "frutillasandiadurazno.png" },
-          { name: "Frutilla con Kiwi", soldOut: false, img: "frutillakiwi.png" },
-          { name: "Frutos Rojos", soldOut: false, img: "frutosrojos.png" },
-          { name: "Uva Fría", soldOut: true, img: "uvafria.png" },
-          { name: "Frutilla y Fruta del Dragón", soldOut: false, img: "frutilladragon.png" },
-          { name: "Banana", soldOut: false, img: "banana.png" },
-          { name: "Mix de Uvas", soldOut: false, img: "mixuvas.png" },
-          { name: "Chicle de Menta", soldOut: false, img: "chiclementa.png" },
-          { name: "Arándanos Frambuesas Frías", soldOut: false, img: "arandanosframbuesas.png" },
-          { name: "Frutos Hawaianos", soldOut: true, img: "frutoshawaianos.png" },
-          { name: "Chupetín Cereza Frutilla", soldOut: false, img: "chupetincereza.png" },
-          { name: "Frutas Hawaianas", soldOut: false, img: "frutashawaianas.png" }
-        ]
-      },
-      {
-        id: "oxbar-30k", brandName: "OXBAR", brandKey: "oxbar", model: "OXBAR Puff 30K / Magic Mazer / G30K PRO", puffsKey: "30k", puffsText: "30.000 Puffs", price: "$25.000", pricePromo: "2X $45.000", defaultImg: "oxbar.png",
-        flavors: [
-          { name: "Arándanos Frambuesa Limón", soldOut: false, img: "arandanosframbuesalimon.png" },
-          { name: "Uva Blanca Fría", soldOut: true, img: "uvablanca.png" },
-          { name: "Frutilla con Frambuesas y Limón Frío", soldOut: true, img: "frutillaframbuesalimon.png" },
-          { name: "Uva Durazno", soldOut: false, img: "uvadurazno.png" },
-          { name: "Gomitas de Sandía", soldOut: true, img: "gomitassandia.png" },
-          { name: "Frutilla Sandía y Durazno", soldOut: true, img: "frutillasandiadurazno.png" },
-          { name: "Gomitas Frías", soldOut: true, img: "gomitasfrias.png" },
-          { name: "Kiwi con Lima Fría", soldOut: true, img: "kiwilima.png" },
-          { name: "Maracuyá con Pomelo", soldOut: true, img: "maracuyapomelo.png" },
-          { name: "Frutilla, Sandía y Fruta del Dragón", soldOut: true, img: "frutillasandiadragon.png" },
-          { name: "Mango Durazno", soldOut: true, img: "mangodurazno.png" },
-          { name: "Soda de Frutilla", soldOut: false, img: "sodafrutilla.png" },
-          { name: "Doble Manzana", soldOut: false, img: "doblemanzana.png" },
-          { name: "Moras con Limón", soldOut: false, img: "moraslimon.png" },
-          { name: "Frutos Rojos", soldOut: false, img: "frutosrojos.png" },
-          { name: "Sandía con Frutilla", soldOut: false, img: "sandiafrutilla.png" },
-          { name: "Uva con Frambuesa", soldOut: false, img: "uvaframbuesa.png" },
-          { name: "Kiwi con Maracuyá", soldOut: false, img: "kiwimaracuya.png" },
-          { name: "Mango Dulce", soldOut: false, img: "mangodulce.png" },
-          { name: "Sandía con Maracuyá", soldOut: true, img: "sandiamaracuya.png" },
-          { name: "Menta Fría", soldOut: true, img: "mentafria.png" },
-          { name: "Uva Mixta", soldOut: true, img: "uvamixta.png" },
-          { name: "Sandía con Frambuesa", soldOut: false, img: "sandiaframbuesa.png" }
-        ]
-      },
-      {
-        id: "oxbar-50k", brandName: "OXBAR", brandKey: "oxbar", model: "OXBAR 50K (3 en 1)", puffsKey: "50k", puffsText: "50.000 Puffs", price: "$35.000", pricePromo: "2X $63.000", defaultImg: "oxbar 50k.png",
-        flavors: [
-          { name: "Ananá, Kiwi y Fruta del Dragón", soldOut: true, img: "ananakiwidragon.png" },
-          { name: "Uva Fría", soldOut: true, img: "uvafria.png" },
-          { name: "Sandía Fría", soldOut: false, img: "sandiafria.png" },
-          { name: "Frutilla Fría", soldOut: false, img: "frutillafria.png" },
-          { name: "Menthol", soldOut: false, img: "menthol.png" },
-          { name: "Kiwi con Maracuyá", soldOut: false, img: "kiwimaracuya.png" },
-          { name: "Frutilla con Kiwi", soldOut: false, img: "frutillakiwi.png" },
-          { name: "Ananá Fría", soldOut: false, img: "ananafria.png" },
-          { name: "Frutilla y Uva", soldOut: true, img: "frutillauva.png" },
-          { name: "Menta Fría", soldOut: false, img: "mentafria.png" }
-        ]
-      },
-      {
-        id: "nic-king-40k", brandName: "Elfbar", brandKey: "elfbar", model: "Nic King 40K Puffs", puffsKey: "40k", puffsText: "40.000 Puffs", price: "$28.000", pricePromo: "2X $50.000", defaultImg: "eb nk.png",
-        flavors: [
-          { name: "Gomitas de mora", soldOut: true, img: "gomitasmora.png" },
-          { name: "Granada dulce", soldOut: true, img: "granadadulce.png" },
-          { name: "Mango y anana", soldOut: true, img: "mangoanana.png" },
-          { name: "Sandia y cereza", soldOut: true, img: "sandiacereza.png" },
-          { name: "Frutilla con fruta del dragon", soldOut: true, img: "frutilladragon.png" },
-          { name: "Sandia fria", soldOut: true, img: "sandiafria.png" },
-          { name: "Pera fria", soldOut: false, img: "perafria.png" },
-          { name: "Anana, pomelo y fruta del dragon", soldOut: true, img: "ananapomelodragon.png" },
-          { name: "Arandanos con rosas", soldOut: false, img: "arandanosrosas.png" },
-          { name: "Frutilla con frambuesas", soldOut: true, img: "frutillaframbuesas.png" },
-          { name: "Arandanos con frambuesas", soldOut: true, img: "arandanosframbuesas.png" },
-          { name: "Moras frias", soldOut: true, img: "morasfrias.png" },
-          { name: "Uva con arandanos", soldOut: true, img: "uvaarandanos.png" },
-          { name: "Gomitas de cereza", soldOut: true, img: "gomitascereza.png" },
-          { name: "Lima fria", soldOut: false, img: "limafria.png" },
-          { name: "Manzana con sandia", soldOut: true, img: "manzanasandia.png" },
-          { name: "Mix de frutos rojos", soldOut: true, img: "mixfrutosrojos.png" }
-        ]
-      }
-    ];
+    const FALLBACK_VAPER_IMG = 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=600&q=80';
+    const FALLBACK_PERFUME_IMG = 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80';
+    const FALLBACK_TECH_IMG = 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=600&q=80';
 
-    // CARGA DESDE LOCALSTORAGE O DEFAULT
-    let perfumesProducts = JSON.parse(localStorage.getItem('ng_perfumes_data')) || defaultPerfumes;
-    let vapersProducts = JSON.parse(localStorage.getItem('ng_vapers_full_data')) || defaultVapers;
-    let techProducts = JSON.parse(localStorage.getItem('ng_tech_data')) || defaultTech;
+    function hidePreloader() {
+      const p = document.getElementById('preloader');
+      if (p) p.classList.add('hidden');
+    }
+    setTimeout(hidePreloader, 2200);
 
-    function saveAllState() {
-      localStorage.setItem('ng_perfumes_data', JSON.stringify(perfumesProducts));
-      localStorage.setItem('ng_vapers_full_data', JSON.stringify(vapersProducts));
-      localStorage.setItem('ng_tech_data', JSON.stringify(techProducts));
-      renderAllProducts();
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('show'), 2500);
     }
 
-    let activeVaperFilters = { brand: 'all', puffs: 'all' };
-    let currentSelectedFlavor = "";
-    let currentProduct = null;
-    let currentAdminTab = 'stock';
-    let tempFlavorList = [];
-    
-    // Variables temporales para fotos subidas
-    let currentUploadedImg = "";
-    let currentUploadedFlavorImg = "";
+    function escapeAttr(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
 
-    // NAVEGACIÓN Y FILTROS CATEGORÍA
-    function filterMainCategory(category, btn) {
-      const parent = btn.parentElement;
-      parent.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    function parsePriceNumber(priceStr) {
+      const digits = String(priceStr || '').replace(/[^0-9]/g, '');
+      return digits ? parseInt(digits, 10) : 0;
+    }
 
-      const sections = document.querySelectorAll('.main-section');
-      sections.forEach(sec => {
-        if (category === 'todos') {
-          sec.style.display = 'block';
-        } else {
-          sec.style.display = (sec.id === category) ? 'block' : 'none';
+    function formatARS(num) {
+      return '$' + Number(num || 0).toLocaleString('es-AR');
+    }
+
+    function matchesPuffBucket(puffsKey, bucket) {
+      if (bucket === 'all') return true;
+      const num = parseInt(String(puffsKey || '').replace(/[^0-9]/g, ''), 10) || 0;
+      if (bucket === '10k-20k') return num >= 10 && num <= 20;
+      if (bucket === '23k-35k') return num >= 23 && num <= 35;
+      if (bucket === '40k-plus') return num >= 40;
+      return true;
+    }
+
+    function setCloudStatus(online, label) {
+      const dot = document.getElementById('cloud-dot');
+      const txt = document.getElementById('cloud-status-text');
+      if (dot) dot.classList.toggle('offline', !online);
+      if (txt) txt.textContent = label;
+    }
+
+    // ==========================================
+    // 📄 CAMBIO DE INTERFAZ POR CATEGORÍA
+    // ==========================================
+    function switchPageView(view) {
+      currentView = view;
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById(`view-${view}`);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+      });
+
+      if (view === 'promos' && promoSwiperInstance) promoSwiperInstance.update();
+      if (view === 'vapers' && brandSwiperInstance) brandSwiperInstance.update();
+      if (view === 'inicio' && heroSwiperInstance) heroSwiperInstance.update();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    // ☁️ CARGA DE SUPABASE
+    // ==========================================
+    async function loadCatalogFromSupabase() {
+      try {
+        if (!sb) throw new Error('SDK no cargado');
+        const [vRes, pRes, tRes] = await Promise.all([
+          sb.from('vapers').select('*').order('sort_order', { ascending: true }),
+          sb.from('perfumes').select('*').order('sort_order', { ascending: true }),
+          sb.from('tech_products').select('*').order('sort_order', { ascending: true })
+        ]);
+        if (vRes.error) throw vRes.error;
+
+        vapersProducts = (vRes.data || []).map(row => ({
+          id: row.id, brandName: row.brand_name, brandKey: row.brand_key, model: row.model,
+          puffsKey: row.puffs_key, puffsText: row.puffs_text, price: row.price,
+          pricePromo: row.price_promo || '', defaultImg: row.default_img || FALLBACK_VAPER_IMG,
+          flavors: Array.isArray(row.flavors) ? row.flavors : []
+        }));
+        perfumesProducts = (pRes.data || []).map(row => ({
+          id: row.id, tag: row.tag, title: row.title, desc: row.description,
+          price: row.price, img: row.img || FALLBACK_PERFUME_IMG, category: row.category, soldOut: !!row.sold_out
+        }));
+        techProducts = (tRes.data || []).map(row => ({
+          id: row.id, tag: row.tag, title: row.title, desc: row.description,
+          price: row.price, img: row.img || FALLBACK_TECH_IMG, soldOut: !!row.sold_out
+        }));
+
+        localStorage.setItem('ng_cloud_cache_v2', JSON.stringify({ vapersProducts, perfumesProducts, techProducts }));
+        setCloudStatus(true, 'Cloud En Vivo');
+      } catch (err) {
+        const cache = JSON.parse(localStorage.getItem('ng_cloud_cache_v2') || 'null');
+        if (cache) {
+          vapersProducts = cache.vapersProducts || [];
+          perfumesProducts = cache.perfumesProducts || [];
+          techProducts = cache.techProducts || [];
+        }
+        setCloudStatus(false, 'Caché Offline');
+      }
+
+      document.getElementById('stat-vapers').textContent = vapersProducts.length;
+      document.getElementById('stat-perfumes').textContent = perfumesProducts.length;
+
+      renderAllProducts();
+      initSwipers();
+      setTimeout(hidePreloader, 250);
+    }
+
+    // ==========================================
+    // SWIPERS
+    // ==========================================
+    function renderHeroSwiper() {
+      const featured = vapersProducts.slice(0, 6);
+      const heroWrap = document.getElementById('hero-swiper-wrapper');
+      if (heroWrap && featured.length) {
+        heroWrap.innerHTML = featured.map(p => {
+          const avail = (p.flavors || []).filter(f => !f.soldOut).length;
+          return `
+            <div class="swiper-slide">
+              <div class="hero-slide-card" onclick='openProductModalById("${escapeAttr(p.id)}")'>
+                <div class="hero-slide-img">
+                  <img src="${escapeAttr(p.defaultImg)}" alt="${escapeAttr(p.model)}" onerror="this.src='${FALLBACK_VAPER_IMG}'" />
+                </div>
+                <div class="hero-slide-info">
+                  <div>
+                    <span class="badge badge-gold">${p.brandName}</span>
+                    <h3 style="font-size:1.3rem; font-weight:800; margin:10px 0 4px;">${p.model}</h3>
+                    <p style="font-size:0.82rem; color:var(--muted);">${p.puffsText} · ${avail} sabores disponibles</p>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding-top:14px; border-top:1px solid var(--border);">
+                    <strong style="font-size:1.2rem;">${p.price}</strong>
+                    <span class="card-action-btn">Elegir sabor →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function renderBrandChips() {
+      const box = document.getElementById('brand-chips-list');
+      if (!box) return;
+      const seen = new Map();
+      vapersProducts.forEach(p => {
+        const effectiveKey = p.brandKey === 'ebcreate' ? 'elfbar' : p.brandKey;
+        const effectiveName = p.brandKey === 'ebcreate' ? 'Elfbar' : p.brandName;
+        if (effectiveKey && effectiveName && !seen.has(effectiveKey)) {
+          seen.set(effectiveKey, effectiveName);
         }
       });
+      const chips = [
+        `<button class="brand-chip ${activeVaperFilters.brand === 'all' ? 'active' : ''}" onclick="filterVaperBrand('all', this)">Todas las Marcas</button>`,
+        ...Array.from(seen.entries()).map(([key, name]) =>
+          `<button class="brand-chip ${activeVaperFilters.brand === key ? 'active' : ''}" onclick="filterVaperBrand('${escapeAttr(key)}', this)">${name}</button>`
+        )
+      ];
+      box.innerHTML = chips.join('');
+    }
 
-      if (category === 'todos') {
-        document.getElementById('catalogo-general').scrollIntoView({ behavior: 'smooth' });
-      } else {
-        const targetSection = document.getElementById(category);
-        if (targetSection) targetSection.scrollIntoView({ behavior: 'smooth' });
+    function initSwipers() {
+      renderHeroSwiper();
+      renderBrandChips();
+      if (heroSwiperInstance) heroSwiperInstance.destroy(true, true);
+
+      heroSwiperInstance = new Swiper('.hero-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 16,
+        loop: vapersProducts.length > 1,
+        autoplay: { delay: 4200, disableOnInteraction: true },
+        navigation: { nextEl: '.hero-next', prevEl: '.hero-prev' }
+      });
+    }
+
+    // ==========================================
+    // 🔍 BÚSQUEDA GLOBAL Y FILTROS
+    // ==========================================
+    function handleGlobalSearch(val) {
+      globalSearchQuery = (val || '').trim();
+      if (!globalSearchQuery) {
+        switchPageView('inicio');
+        return;
       }
-      dropdownMenu.classList.remove('show');
+      switchPageView('search');
+      renderGlobalSearchResults();
     }
 
-    // RENDERIZADO GENERAL DE PRODUCTOS
-    function renderAllProducts() {
-      renderPerfumes();
+    function clearGlobalSearch() {
+      document.getElementById('global-search').value = '';
+      globalSearchQuery = '';
+      switchPageView('inicio');
+    }
+
+    function normalizeSearchText(str) {
+      return String(str || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function levenshteinDist(a, b) {
+      if (Math.abs(a.length - b.length) > 2) return 3;
+      const dp = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    function fuzzyMatch(query, target) {
+      const q = normalizeSearchText(query).trim();
+      const t = normalizeSearchText(target);
+      if (!q) return true;
+      if (t.includes(q)) return true;
+      const qWords = q.split(/\s+/).filter(Boolean);
+      const tWords = t.split(/[\s\-_/().]+/).filter(Boolean);
+      return qWords.every(qw => {
+        if (t.includes(qw)) return true;
+        if (qw.length < 3) return false;
+        const maxDist = qw.length >= 6 ? 2 : 1;
+        return tWords.some(tw => levenshteinDist(qw, tw) <= maxDist);
+      });
+    }
+
+    function renderGlobalSearchResults() {
+      const q = globalSearchQuery;
+      const vMatches = vapersProducts.filter(p =>
+        fuzzyMatch(q, p.model + ' ' + p.brandName + ' ' + p.puffsText) ||
+        (p.flavors || []).some(f => fuzzyMatch(q, f.name || ''))
+      );
+      const pMatches = perfumesProducts.filter(p => fuzzyMatch(q, p.title + ' ' + p.tag + ' ' + (p.desc || '')));
+      const tMatches = techProducts.filter(p => fuzzyMatch(q, p.title + ' ' + p.tag + ' ' + (p.desc || '')));
+
+      const total = vMatches.length + pMatches.length + tMatches.length;
+      document.getElementById('search-results-title').textContent = `Resultados para "${globalSearchQuery}" (${total})`;
+
+      const grid = document.getElementById('search-results-grid');
+      if (!total) {
+        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:48px; color:var(--muted);">No encontramos productos que coincidan con "${escapeAttr(globalSearchQuery)}".</div>`;
+        return;
+      }
+
+      grid.innerHTML = [
+        ...vMatches.map(p => vaperCardHTML(p, '')),
+        ...pMatches.map(p => perfumeCardHTML(p)),
+        ...tMatches.map(p => techCardHTML(p))
+      ].join('');
+    }
+
+    function filterVaperBrand(brand, el) {
+      activeVaperFilters.brand = brand;
+      document.querySelectorAll('.brand-chip').forEach(c => c.classList.remove('active'));
+      if (el) el.classList.add('active');
       renderVapers();
+    }
+
+    function filterVaperPuffs(bucket, el) {
+      activeVaperFilters.puffs = bucket;
+      document.querySelectorAll('#puffs-filter-pills .f-pill').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      renderVapers();
+    }
+
+    function setExtraFilter(mode, el) {
+      activeVaperFilters.extra = mode;
+      ['stock-only-all', 'stock-only-promo', 'stock-only-avail'].forEach(id => document.getElementById(id)?.classList.remove('active'));
+      if (el) el.classList.add('active');
+      renderVapers();
+    }
+
+    function resetAllFilters() {
+      activeVaperFilters = { brand: 'all', puffs: 'all', extra: 'all' };
+      document.getElementById('sort-vapers').value = 'default';
+      document.querySelectorAll('.brand-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+      document.querySelectorAll('#puffs-filter-pills .f-pill').forEach((b, i) => b.classList.toggle('active', i === 0));
+      setExtraFilter('all', document.getElementById('stock-only-all'));
+      renderVapers();
+    }
+
+    function filterPerfumes(cat, el) {
+      activePerfumeCategory = cat;
+      el.parentElement.querySelectorAll('.f-pill').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      renderPerfumes();
+    }
+
+    // ==========================================
+    // 🎨 TEMPLATES DE TARJETAS
+    // ==========================================
+    function vaperCardHTML(p, extraClass) {
+      const availCount = (p.flavors || []).filter(f => !f.soldOut).length;
+      return `
+        <article class="product-card ${extraClass}" onclick='openProductModalById("${escapeAttr(p.id)}")'>
+          <div class="card-stage">
+            <img src="${escapeAttr(p.defaultImg)}" alt="${escapeAttr(p.model)}" loading="lazy" onerror="this.src='${FALLBACK_VAPER_IMG}'" />
+            <div class="card-badges-top">
+              <span class="badge ${availCount > 0 ? 'badge-ink' : 'badge-danger'}">${availCount > 0 ? availCount + ' sabores' : 'Agotado'}</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">${p.brandName} · ${p.puffsText}</div>
+            <h3 class="card-title">${p.model}</h3>
+            <div class="card-footer">
+              <div>
+                <span class="price-now">${p.price}</span>
+              </div>
+              <button class="card-action-btn">Elegir Sabor</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function perfumeCardHTML(p) {
+      return `
+        <article class="product-card">
+          <div class="card-stage">
+            <img src="${escapeAttr(p.img)}" alt="${escapeAttr(p.title)}" loading="lazy" onerror="this.src='${FALLBACK_PERFUME_IMG}'" />
+            <div class="card-badges-top">
+              <span class="badge badge-gold">${p.category || 'Importado'}</span>
+              ${p.soldOut ? `<span class="badge badge-danger">Agotado</span>` : ''}
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">${p.tag || 'Perfumería'}</div>
+            <h3 class="card-title">${p.title}</h3>
+            <p class="card-desc">${p.desc || ''}</p>
+            <div class="card-footer">
+              <span class="price-now">${p.price}</span>
+              <button class="card-action-btn outline" onclick="addSimpleToCart('perfume', '${escapeAttr(p.id)}')" ${p.soldOut ? 'disabled' : ''}>+ Agregar</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function techCardHTML(p) {
+      return `
+        <article class="product-card">
+          <div class="card-stage">
+            <img src="${escapeAttr(p.img)}" alt="${escapeAttr(p.title)}" loading="lazy" onerror="this.src='${FALLBACK_TECH_IMG}'" />
+            <div class="card-badges-top"><span class="badge badge-ink">${p.tag || 'Tech'}</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">${p.tag || 'Tecnología'}</div>
+            <h3 class="card-title">${p.title}</h3>
+            <p class="card-desc">${p.desc || ''}</p>
+            <div class="card-footer">
+              <span class="price-now">${p.price}</span>
+              <button class="card-action-btn" onclick="addSimpleToCart('tech', '${escapeAttr(p.id)}')">+ Agregar</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderAllProducts() {
+      renderVapers();
+      renderPerfumes();
       renderTech();
-    }
-
-    function renderPerfumes() {
-      const grid = document.getElementById('perfume-grid');
-      grid.innerHTML = '';
-      perfumesProducts.forEach(p => {
-        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, N&G IMPORTADOS. Quería consultar por ' + p.title + '. ¿Tienen disponibilidad?')}`;
-        const card = document.createElement('article');
-        card.className = 'product perfume-card';
-        card.setAttribute('data-category', p.category);
-        card.innerHTML = `
-          <div class="product-photo"><img src="${p.img}" alt="${p.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80'"></div>
-          <div class="product-info">
-            <div>
-              <div class="tag">${p.tag}</div>
-              <h3>${p.title}</h3>
-              <p>${p.desc}</p>
-            </div>
-            <div class="product-bottom">
-              <span class="price">${p.price}</span>
-              <a class="small-btn" href="${waUrl}" target="_blank" rel="noopener">Consultar ↗</a>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function renderTech() {
-      const grid = document.getElementById('tech-grid');
-      grid.innerHTML = '';
-      techProducts.forEach(p => {
-        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, N&G IMPORTADOS. Quería encargar ' + p.title + '. ¿Tienen stock?')}`;
-        const card = document.createElement('article');
-        card.className = 'product';
-        card.style.maxWidth = '400px';
-        card.style.margin = '0 auto';
-        card.innerHTML = `
-          <div class="product-photo"><img src="${p.img}" alt="${p.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=600&q=80'"></div>
-          <div class="product-info">
-            <div>
-              <div class="tag">${p.tag}</div>
-              <h3>${p.title}</h3>
-              <p>${p.desc}</p>
-            </div>
-            <div class="product-bottom">
-              <span class="price">${p.price}</span>
-              <a class="small-btn" href="${waUrl}" target="_blank" rel="noopener">Encargar ↗</a>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+      renderCart();
     }
 
     function renderVapers() {
       const grid = document.getElementById('vaper-grid');
-      grid.innerHTML = '';
+      const countLbl = document.getElementById('vapers-count-label');
+      const sortMode = document.getElementById('sort-vapers')?.value || 'default';
 
-      vapersProducts.forEach(p => {
-        const card = document.createElement('article');
-        card.className = 'product vaper-card';
-        card.setAttribute('data-brand', p.brandKey);
-        card.setAttribute('data-puffs', p.puffsKey);
-        card.onclick = () => openProductModal(p);
-
-        card.innerHTML = `
-          <div class="product-photo">
-            <img src="${p.defaultImg}" alt="${p.model}" onerror="this.src='https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=600&q=80'">
-          </div>
-          <div class="product-info">
-            <div>
-              <span class="tag">${p.brandName}</span>
-              <h3>${p.model}</h3>
-              <p>${p.puffsText}</p>
-            </div>
-            <div class="product-bottom">
-              <div>
-                <div class="price">${p.price}</div>
-                <div style="font-size: 0.78rem; color: #16a34a; font-weight: 600;">${p.pricePromo}</div>
-              </div>
-              <button class="small-btn">Elegir sabor ↗</button>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
+      let filtered = vapersProducts.filter(p => {
+        if (activeVaperFilters.brand !== 'all') {
+          if (activeVaperFilters.brand === 'elfbar') {
+            if (p.brandKey !== 'elfbar' && p.brandKey !== 'ebcreate') return false;
+          } else if (p.brandKey !== activeVaperFilters.brand) {
+            return false;
+          }
+        }
+        if (!matchesPuffBucket(p.puffsKey, activeVaperFilters.puffs)) return false;
+        const availCount = (p.flavors || []).filter(f => !f.soldOut).length;
+        if (activeVaperFilters.extra === 'promo' && !p.pricePromo) return false;
+        if (activeVaperFilters.extra === 'avail' && availCount === 0) return false;
+        return true;
       });
+
+      if (sortMode === 'price-asc') filtered.sort((a, b) => parsePriceNumber(a.price) - parsePriceNumber(b.price));
+      else if (sortMode === 'price-desc') filtered.sort((a, b) => parsePriceNumber(b.price) - parsePriceNumber(a.price));
+      else if (sortMode === 'flavors-desc') filtered.sort((a, b) => (b.flavors || []).filter(f => !f.soldOut).length - (a.flavors || []).filter(f => !f.soldOut).length);
+
+      if (countLbl) countLbl.textContent = `${filtered.length} modelos`;
+      grid.innerHTML = filtered.length
+        ? filtered.map(p => vaperCardHTML(p, '')).join('')
+        : `<div style="grid-column:1/-1; text-align:center; padding:48px 20px; background:var(--bg-soft); border-radius:var(--radius-md); border:1px solid var(--border); color:var(--muted);">No hay vapers con esos filtros. <button class="btn btn-outline" style="margin-left:10px; padding:6px 14px;" onclick="resetAllFilters()">Ver todos</button></div>`;
     }
 
-    // MODAL VAPERS
+    function renderPerfumes() {
+      const filtered = perfumesProducts.filter(p => activePerfumeCategory === 'all' || p.category === activePerfumeCategory);
+      document.getElementById('perfume-grid').innerHTML = filtered.map(perfumeCardHTML).join('');
+    }
+
+    function renderTech() {
+      document.getElementById('tech-grid').innerHTML = techProducts.map(techCardHTML).join('');
+    }
+
+    // ==========================================
+    // 💨 MODAL VAPER & CARRITO
+    // ==========================================
+    function openProductModalById(id) {
+      const p = vapersProducts.find(x => x.id === id);
+      if (p) openProductModal(p);
+    }
+
     function openProductModal(p) {
       currentProduct = p;
-      currentSelectedFlavor = "";
-      const modal = document.getElementById('product-modal');
-      const content = document.getElementById('modal-body-content');
-
-      let flavorsHTML = '';
-      p.flavors.forEach((f, index) => {
-        if (f.soldOut) {
-          flavorsHTML += `
-            <div class="flavor-item soldout">
-              <span class="flavor-name" style="color: #9ca3af;">🚫 ${f.name} (Agotado)</span>
+      currentSelectedFlavor = '';
+      document.getElementById('modal-body-content').innerHTML = `
+        <div class="modal-product-layout">
+          <div class="modal-img-stage">
+            <img id="modal-vaper-img" src="${escapeAttr(p.defaultImg)}" alt="${escapeAttr(p.model)}" onerror="this.src='${FALLBACK_VAPER_IMG}'" />
+          </div>
+          <div>
+            <div class="card-meta">${p.brandName} · ${p.puffsText}</div>
+            <h2 style="font-size:1.55rem; font-weight:800; margin:4px 0 8px;">${p.model}</h2>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+              <span style="font-size:1.35rem; font-weight:800;">${p.price}</span>
+              ${p.pricePromo ? `<span class="badge badge-emerald">${p.pricePromo}</span>` : ''}
             </div>
-          `;
-        } else {
-          const flavorImgParam = f.img ? `'${f.img.replace(/'/g, "\\'")}'` : 'null';
-          flavorsHTML += `
-            <div class="flavor-item" id="flavor-item-${index}" onclick="selectFlavor('${f.name.replace(/'/g, "\\'")}', ${index}, ${flavorImgParam})">
-              <span class="flavor-name">${f.name}</span>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+              <span style="font-size:0.84rem; font-weight:600; color:var(--muted);">Cantidad:</span>
+              <button class="swiper-btn-circle" onclick="changeQty(-1)">-</button>
+              <input type="number" id="qty-number" value="1" min="1" max="10" readonly style="width:44px; text-align:center; border:1px solid var(--border); border-radius:8px; padding:6px; font-weight:700;" />
+              <button class="swiper-btn-circle" onclick="changeQty(1)">+</button>
             </div>
-          `;
-        }
-      });
-
-      content.innerHTML = `
-        <div class="modal-img-container">
-          <img id="modal-vaper-img" src="${p.defaultImg}" alt="${p.model}">
-        </div>
-        <div class="modal-info">
-          <span class="tag">${p.brandName}</span>
-          <h2 class="modal-title">${p.model}</h2>
-          <p style="color:var(--muted); font-size:0.9rem; min-height:auto;">${p.puffsText}</p>
-          <div class="price">${p.price} <span style="font-size:0.85rem; color:#16a34a; font-weight:normal; margin-left:8px;">(${p.pricePromo})</span></div>
-
-          <div style="margin-top: 5px;">
-            <label style="font-size: 0.85rem; color: var(--muted);">Cantidad (Máx. 10):</label>
-            <div class="quantity-control">
-              <button class="qty-btn" onclick="changeQty(-1)">-</button>
-              <input type="number" id="qty-number" class="qty-input" value="1" min="1" max="10" readonly>
-              <button class="qty-btn" onclick="changeQty(1)">+</button>
+            <div>
+              <label style="font-size:0.82rem; font-weight:700; color:var(--ink-2);">Elegí tu sabor:</label>
+              <input type="text" class="flavor-search" placeholder="Filtrar sabores..." oninput="renderModalFlavors(this.value)" />
+              <div class="flavor-list" id="modal-flavor-list"></div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px;">
+              <button class="btn btn-dark" onclick="addVaperToCart()">Agregar al Pedido</button>
+              <button class="btn btn-emerald" onclick="sendWhatsAppModal()">WhatsApp ↗</button>
             </div>
           </div>
-
-          <div class="flavors-container">
-            <label style="font-size: 0.85rem; color: var(--muted); font-weight: bold;">Elige tu sabor:</label>
-            <div class="flavor-option-list">
-              ${flavorsHTML}
-            </div>
-          </div>
-
-          <button class="btn-whatsapp" onclick="sendWhatsAppModal()">
-            Pedir por WhatsApp
-          </button>
         </div>
       `;
-      modal.style.display = 'flex';
+      renderModalFlavors('');
+      document.getElementById('product-modal').classList.add('open');
     }
 
-    function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
-    function changeQty(amount) {
-      const input = document.getElementById('qty-number');
-      let val = parseInt(input.value) + amount;
-      if (val < 1) val = 1;
-      if (val > 10) val = 10;
-      input.value = val;
+    function renderModalFlavors(filterText) {
+      const list = document.getElementById('modal-flavor-list');
+      if (!list || !currentProduct) return;
+      const q = (filterText || '').trim();
+      list.innerHTML = (currentProduct.flavors || [])
+        .filter(f => !q || fuzzyMatch(q, f.name || ''))
+        .map(f => {
+          if (f.soldOut) return `<div class="flavor-item soldout"><span>${f.name}</span><span style="font-size:0.74rem;">Agotado</span></div>`;
+          const isSel = currentSelectedFlavor === f.name;
+          return `
+            <div class="flavor-item ${isSel ? 'selected' : ''}" onclick="selectFlavor('${escapeAttr(f.name)}', '${escapeAttr(f.img || '')}')">
+              <span>${f.name}</span>
+              <span style="font-size:0.75rem; color:${isSel ? 'var(--gold)' : 'var(--emerald)'};">${isSel ? 'Elegido' : 'Disponible'}</span>
+            </div>
+          `;
+        }).join('') || `<div style="color:var(--muted); font-size:0.84rem; padding:10px;">Sin sabores coincidentes.</div>`;
     }
 
-    function selectFlavor(name, index, flavorImg) {
+    function selectFlavor(name, flavorImg) {
       currentSelectedFlavor = name;
-      const items = document.querySelectorAll('.flavor-item');
-      items.forEach(item => item.classList.remove('selected'));
-      const selectedItem = document.getElementById(`flavor-item-${index}`);
-      if(selectedItem) selectedItem.classList.add('selected');
-
+      const searchInput = document.querySelector('.flavor-search');
+      renderModalFlavors(searchInput ? searchInput.value : '');
       const modalImg = document.getElementById('modal-vaper-img');
-      if (modalImg) {
-        const newSrc = flavorImg ? flavorImg : (currentProduct ? currentProduct.defaultImg : '');
-        if (newSrc && modalImg.src !== newSrc) {
-          modalImg.style.opacity = '0.3';
-          setTimeout(() => {
-            modalImg.src = newSrc;
-            modalImg.style.opacity = '1';
-          }, 150);
-        }
-      }
+      if (modalImg && currentProduct) modalImg.src = flavorImg || currentProduct.defaultImg || FALLBACK_VAPER_IMG;
     }
+
+    function changeQty(delta) {
+      const input = document.getElementById('qty-number');
+      if (input) input.value = Math.max(1, Math.min(10, (parseInt(input.value, 10) || 1) + delta));
+    }
+
+    function closeModal() { document.getElementById('product-modal').classList.remove('open'); }
 
     function sendWhatsAppModal() {
-      if (!currentSelectedFlavor) {
-        alert("Por favor selecciona un sabor disponible antes de encargar.");
-        return;
-      }
+      if (!currentSelectedFlavor) return showToast('Elegí un sabor disponible primero');
       const qty = document.getElementById('qty-number').value;
-      const message = `Hola, N&G IMPORTADOS. Quisiera encargar:\n- Producto: ${currentProduct.model}\n- Sabor: ${currentSelectedFlavor}\n- Cantidad: ${qty} unidad(es)\n- Precio unitario: ${currentProduct.price}`;
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+      const msg = `Hola, N&G IMPORTADOS! Quisiera encargar:\n- Producto: ${currentProduct.model}\n- Sabor: ${currentSelectedFlavor}\n- Cantidad: ${qty} unidad(es)\n- Precio ref.: ${currentProduct.price}${currentProduct.pricePromo ? ' (' + currentProduct.pricePromo + ')' : ''}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // ==========================================
-    // ⚙️ PANEL DE CONTROL ADMINISTRADOR MULTIRRUBRO
-    // ==========================================
+    function saveCart() {
+      localStorage.setItem('ng_cart_v2', JSON.stringify(cart));
+      renderCart();
+    }
 
-    function openAdminPanel() {
-      const pass = prompt("🔐 Ingresa tu contraseña de creador:");
-      if (pass !== "4212") {
-        alert("Contraseña incorrecta.");
+    function addVaperToCart() {
+      if (!currentSelectedFlavor) return showToast('Elegí un sabor disponible primero');
+      const qty = parseInt(document.getElementById('qty-number').value, 10) || 1;
+      const existing = cart.find(i => i.id === currentProduct.id && i.flavor === currentSelectedFlavor);
+      if (existing) existing.qty += qty;
+      else cart.push({ id: currentProduct.id, title: currentProduct.model, flavor: currentSelectedFlavor, price: currentProduct.price, unitNum: parsePriceNumber(currentProduct.price), qty });
+      saveCart();
+      closeModal();
+      toggleCart(true);
+      showToast('Agregado al pedido');
+    }
+
+    function addSimpleToCart(type, id) {
+      const source = type === 'perfume' ? perfumesProducts : techProducts;
+      const item = source.find(x => x.id === id);
+      if (!item) return;
+      const existing = cart.find(i => i.id === item.id && !i.flavor);
+      if (existing) existing.qty += 1;
+      else cart.push({ id: item.id, title: item.title, flavor: '', price: item.price, unitNum: parsePriceNumber(item.price), qty: 1 });
+      saveCart();
+      showToast(`${item.title} agregado`);
+    }
+
+    function removeFromCart(idx) { cart.splice(idx, 1); saveCart(); }
+    function clearCart() { cart = []; saveCart(); }
+    function toggleCart(open) { document.getElementById('cartDrawer').classList.toggle('open', open); }
+
+    function calculateCartTotals() {
+      let subtotal = 0;
+      let totalDiscount = 0;
+      const qtyByModel = {};
+      const unitByModel = {};
+
+      cart.forEach(item => {
+        subtotal += item.unitNum * item.qty;
+        qtyByModel[item.id] = (qtyByModel[item.id] || 0) + item.qty;
+        unitByModel[item.id] = item.unitNum;
+      });
+
+      const appliedPromos = [];
+      Object.entries(qtyByModel).forEach(([id, totalQty]) => {
+        if (totalQty < 2) return;
+        const vaper = vapersProducts.find(v => v.id === id);
+        if (!vaper || !vaper.pricePromo) return;
+        const promo2xPrice = parsePriceNumber(String(vaper.pricePromo).replace(/2x/i, ''));
+        const unitPrice = unitByModel[id] || 0;
+        if (promo2xPrice > 0 && promo2xPrice < unitPrice * 2) {
+          const pairs = Math.floor(totalQty / 2);
+          const saving = pairs * (unitPrice * 2 - promo2xPrice);
+          totalDiscount += saving;
+          appliedPromos.push({ model: vaper.model, pairs, saving });
+        }
+      });
+
+      return { subtotal, totalDiscount, finalTotal: subtotal - totalDiscount, appliedPromos };
+    }
+
+    function renderCart() {
+      document.getElementById('cart-count').textContent = cart.reduce((acc, i) => acc + i.qty, 0);
+      const listEl = document.getElementById('cartItemsList');
+      const totalEl = document.getElementById('cartTotalText');
+      if (!cart.length) {
+        listEl.innerHTML = `<div style="text-align:center; color:var(--muted); padding:44px 12px;">Tu pedido está vacío. Elegí cualquier producto del catálogo para sumarlo.</div>`;
+        totalEl.textContent = '$0';
         return;
       }
-      renderAdminContent();
-      document.getElementById('adminModal').style.display = 'flex';
+
+      const { totalDiscount, finalTotal, appliedPromos } = calculateCartTotals();
+      const itemsHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+          <div>
+            <div style="font-weight:700; font-size:0.9rem;">${item.title}</div>
+            ${item.flavor ? `<div style="font-size:0.78rem; color:var(--gold); font-weight:600;">Sabor: ${item.flavor}</div>` : ''}
+            <div style="font-size:0.8rem; color:var(--muted);">${item.qty} x ${item.price}</div>
+          </div>
+          <button class="swiper-btn-circle" onclick="removeFromCart(${idx})">✕</button>
+        </div>
+      `).join('');
+
+      const promoBannerHTML = appliedPromos.length
+        ? `<div style="padding:10px 12px; border-radius:10px; background:var(--emerald-soft); color:var(--emerald); font-size:0.78rem; font-weight:700; margin-top:4px;">
+            ${appliedPromos.map(p => `Descuento 2X (${p.model}): -${formatARS(p.saving)}`).join('<br>')}
+           </div>`
+        : '';
+
+      listEl.innerHTML = itemsHTML + promoBannerHTML;
+      totalEl.textContent = formatARS(finalTotal);
     }
 
-    function closeAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
-
-    // Teclas directas: Ctrl + Shift + A
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-        e.preventDefault();
-        openAdminPanel();
-      }
-    });
-
-    function switchAdminTab(tab, btn) {
-      currentAdminTab = tab;
-      document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderAdminContent();
-    }
-
-    function renderAdminContent() {
-      const body = document.getElementById('adminBodyContent');
-      body.innerHTML = '';
-
-      if (currentAdminTab === 'stock') {
-        // Pestaña 1: Stock y Modificaciones
-        let html = `<h4 style="color:var(--accent-color);">💨 Vapers (Stock & Precios)</h4>`;
-        vapersProducts.forEach((p, pIdx) => {
-          let flavorRows = '';
-          p.flavors.forEach((f, fIdx) => {
-            flavorRows += `
-              <div class="flavor-row">
-                <span class="flavor-row-name">${f.name}</span>
-                <label class="switch">
-                  <input type="checkbox" ${!f.soldOut ? 'checked' : ''} onchange="toggleVaperStock(${pIdx}, ${fIdx})">
-                  <span class="slider-switch"></span>
-                </label>
-              </div>
-            `;
-          });
-
-          html += `
-            <div class="admin-card">
-              <div class="admin-card-title">
-                <span>📦 ${p.model}</span>
-                <div style="display:flex; gap:8px;">
-                  <input class="input-field" value="${p.price}" onchange="updateVaperPrice(${pIdx}, 'price', this.value)" placeholder="Precio">
-                  <input class="input-field" value="${p.pricePromo}" onchange="updateVaperPrice(${pIdx}, 'pricePromo', this.value)" placeholder="Promo">
-                  <button class="small-btn" style="background:var(--danger); border-color:var(--danger); color:#fff;" onclick="deleteProduct('vaper', ${pIdx})">🗑️</button>
-                </div>
-              </div>
-              <p style="font-size:0.8rem; color:var(--muted); margin-bottom:8px;">Sabores & Stock (Verde = Disponible / Gris = Agotado):</p>
-              <div style="max-height:140px; overflow-y:auto;">${flavorRows}</div>
-            </div>
-          `;
-        });
-
-        html += `<h4 style="color:var(--accent-color); margin-top:20px;">🧪 Perfumes (Gestión)</h4>`;
-        perfumesProducts.forEach((p, pIdx) => {
-          html += `
-            <div class="admin-card">
-              <div class="admin-card-title">
-                <span>🧪 ${p.title} (${p.category})</span>
-                <div style="display:flex; gap:8px;">
-                  <input class="input-field" value="${p.price}" onchange="updatePerfumePrice(${pIdx}, this.value)" placeholder="Precio">
-                  <button class="small-btn" style="background:var(--danger); border-color:var(--danger); color:#fff;" onclick="deleteProduct('perfume', ${pIdx})">🗑️ Eliminar</button>
-                </div>
-              </div>
-              <p style="font-size:0.82rem; color:var(--muted);">${p.desc}</p>
-            </div>
-          `;
-        });
-
-        html += `<h4 style="color:var(--accent-color); margin-top:20px;">🎧 Tecnología & AirPods</h4>`;
-        techProducts.forEach((p, pIdx) => {
-          html += `
-            <div class="admin-card">
-              <div class="admin-card-title">
-                <span>🎧 ${p.title}</span>
-                <div style="display:flex; gap:8px;">
-                  <input class="input-field" value="${p.price}" onchange="updateTechPrice(${pIdx}, this.value)" placeholder="Precio">
-                  <button class="small-btn" style="background:var(--danger); border-color:var(--danger); color:#fff;" onclick="deleteProduct('tech', ${pIdx})">🗑️ Eliminar</button>
-                </div>
-              </div>
-            </div>
-          `;
-        });
-
-        body.innerHTML = html;
-
-      } else {
-        // Pestaña 2: Formulario Agregar Nuevo Producto
-        body.innerHTML = `
-          <div class="admin-card">
-            <h4 style="color:var(--accent-color); margin-bottom:15px;">➕ Añadir Nuevo Producto al Catálogo</h4>
-            
-            <div class="admin-form-group">
-              <label>Selecciona la Categoría:</label>
-              <select class="select-field" id="new-prod-type" onchange="renderNewProductFields()">
-                <option value="perfume">🧪 Perfume</option>
-                <option value="vaper">💨 Vaper</option>
-                <option value="tech">🎧 Tecnología / AirPods</option>
-              </select>
-            </div>
-
-            <div id="dynamic-add-fields"></div>
-
-            <button class="btn" style="width:100%; margin-top:15px;" onclick="saveNewProduct()">✨ Guardar y Publicar Producto</button>
-          </div>
-        `;
-        renderNewProductFields();
-      }
-    }
-
-    // PROCESADOR DE IMÁGENES A BASE64 (DESDE DISPOSITIVO LOCAL)
-    function handleImageUpload(inputElement, targetVarName, previewImgId) {
-      const file = inputElement.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const base64Data = e.target.result;
-          if (targetVarName === 'main') currentUploadedImg = base64Data;
-          if (targetVarName === 'flavor') currentUploadedFlavorImg = base64Data;
-
-          const preview = document.getElementById(previewImgId);
-          if (preview) {
-            preview.src = base64Data;
-            preview.style.display = 'block';
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // CAMPOS DINÁMICOS FORMULARIO CON SUBIDA DE FOTOS LOCAL
-    function renderNewProductFields() {
-      const type = document.getElementById('new-prod-type').value;
-      const container = document.getElementById('dynamic-add-fields');
-      currentUploadedImg = "";
-      currentUploadedFlavorImg = "";
-
-      if (type === 'perfume') {
-        container.innerHTML = `
-          <div class="admin-row-2">
-            <div class="admin-form-group">
-              <label>Nombre del Perfume:</label>
-              <input class="input-field" id="p-title" placeholder="Ej: Khamrah Qahwa">
-            </div>
-            <div class="admin-form-group">
-              <label>Marca / Tag:</label>
-              <input class="input-field" id="p-tag" placeholder="Ej: Unisex · Lattafa">
-            </div>
-          </div>
-          <div class="admin-row-2">
-            <div class="admin-form-group">
-              <label>Género / Categoría:</label>
-              <select class="select-field" id="p-cat">
-                <option value="masculino">Masculino</option>
-                <option value="femenino">Femenino</option>
-                <option value="unisex">Unisex</option>
-              </select>
-            </div>
-            <div class="admin-form-group">
-              <label>Precio:</label>
-              <input class="input-field" id="p-price" placeholder="$48.000">
-            </div>
-          </div>
-          <div class="admin-form-group">
-            <label>Foto del Perfume (Subir desde dispositivo):</label>
-            <div class="file-input-wrapper">
-              <label class="file-input-btn" for="p-img-file">📁 Seleccionar imagen desde Celular/PC</label>
-              <input type="file" id="p-img-file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'main', 'p-preview')">
-              <img id="p-preview" class="file-preview">
-            </div>
-          </div>
-          <div class="admin-form-group">
-            <label>Descripción / Notas Olfativas:</label>
-            <textarea class="textarea-field" id="p-desc" placeholder="Gourmand intenso con notas de café arábigo tostado..."></textarea>
-          </div>
-        `;
-      } else if (type === 'vaper') {
-        tempFlavorList = [];
-        container.innerHTML = `
-          <div class="admin-row-2">
-            <div class="admin-form-group">
-              <label>Marca:</label>
-              <input class="input-field" id="v-brandname" placeholder="Ej: Elfbar">
-            </div>
-            <div class="admin-form-group">
-              <label>Clave Marca (Para filtros):</label>
-              <select class="select-field" id="v-brandkey">
-                <option value="elfbar">Elfbar</option>
-                <option value="ignite">Ignite</option>
-                <option value="maskking">Maskking</option>
-                <option value="dinner-lady">Dinner Lady</option>
-                <option value="nikbar">Nikbar</option>
-                <option value="blvk">BLVK</option>
-                <option value="lost-mary">Lost Mary</option>
-                <option value="oxbar">OXBAR</option>
-              </select>
-            </div>
-          </div>
-          <div class="admin-row-2">
-            <div class="admin-form-group">
-              <label>Modelo:</label>
-              <input class="input-field" id="v-model" placeholder="Ej: Elfbar GH23000">
-            </div>
-            <div class="admin-form-group">
-              <label>Puffs (Ej: 20k, 30k, 40k):</label>
-              <input class="input-field" id="v-puffskey" placeholder="23k">
-            </div>
-          </div>
-          <div class="admin-row-2">
-            <div class="admin-form-group">
-              <label>Precio Unidad:</label>
-              <input class="input-field" id="v-price" placeholder="$26.000">
-            </div>
-            <div class="admin-form-group">
-              <label>Precio Promo:</label>
-              <input class="input-field" id="v-promo" placeholder="2X $48.000">
-            </div>
-          </div>
-          <div class="admin-form-group">
-            <label>Foto Principal Vaper (Subir desde dispositivo):</label>
-            <div class="file-input-wrapper">
-              <label class="file-input-btn" for="v-img-file">📁 Seleccionar foto principal</label>
-              <input type="file" id="v-img-file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'main', 'v-preview')">
-              <img id="v-preview" class="file-preview">
-            </div>
-          </div>
-
-          <div style="border-top: 1px solid #eae5df; padding-top: 12px; margin-top: 10px;">
-            <label style="font-weight:bold; color:var(--accent-color);">🍉 Agregar Sabores con Fotos Individuales:</label>
-            <div class="admin-form-group" style="margin-top:8px;">
-              <input class="input-field" id="flavor-name-input" placeholder="Nombre Sabor (Ej: Sandía Fría)">
-            </div>
-            <div class="admin-form-group">
-              <label>Foto para este Sabor (Opcional):</label>
-              <div class="file-input-wrapper">
-                <label class="file-input-btn" for="f-img-file">📷 Cargar foto del sabor</label>
-                <input type="file" id="f-img-file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'flavor', 'f-preview')">
-                <img id="f-preview" class="file-preview">
-              </div>
-            </div>
-            <button class="small-btn" style="margin-top:6px; width:100%;" onclick="addFlavorToTemp()">+ Añadir Sabor a la Lista</button>
-            <div id="temp-flavors-list" style="margin-top:10px;"></div>
-          </div>
-        `;
-      } else if (type === 'tech') {
-        container.innerHTML = `
-          <div class="admin-row-2">
-            <div class="admin-form-group">
-              <label>Nombre del Dispositivo:</label>
-              <input class="input-field" id="t-title" placeholder="Ej: AirPods Max">
-            </div>
-            <div class="admin-form-group">
-              <label>Tag / Subtítulo:</label>
-              <input class="input-field" id="t-tag" placeholder="Ej: Audio · Over-Ear">
-            </div>
-          </div>
-          <div class="admin-row-2">
-            <div class="admin-form-group">
-              <label>Precio:</label>
-              <input class="input-field" id="t-price" placeholder="$85.000">
-            </div>
-            <div class="admin-form-group">
-              <label>Foto del Producto (Subir desde dispositivo):</label>
-              <div class="file-input-wrapper">
-                <label class="file-input-btn" for="t-img-file">📁 Seleccionar imagen del producto</label>
-                <input type="file" id="t-img-file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'main', 't-preview')">
-                <img id="t-preview" class="file-preview">
-              </div>
-            </div>
-          </div>
-          <div class="admin-form-group">
-            <label>Descripción:</label>
-            <textarea class="textarea-field" id="t-desc" placeholder="Cancelación de ruido activa, audio espacial..."></textarea>
-          </div>
-        `;
-      }
-    }
-
-    function addFlavorToTemp() {
-      const name = document.getElementById('flavor-name-input').value.trim();
-      if (!name) return alert("Escribe el nombre del sabor");
-
-      tempFlavorList.push({ name, soldOut: false, img: currentUploadedFlavorImg || '' });
-      
-      document.getElementById('flavor-name-input').value = '';
-      document.getElementById('f-img-file').value = '';
-      currentUploadedFlavorImg = "";
-      const fPrev = document.getElementById('f-preview');
-      if (fPrev) fPrev.style.display = 'none';
-
-      const listDiv = document.getElementById('temp-flavors-list');
-      listDiv.innerHTML = tempFlavorList.map(f => `<div class="flavor-row"><span class="flavor-row-name">🍓 ${f.name} ${f.img ? '(Foto cargada)' : '(Sin foto ind.)'}</span></div>`).join('');
-    }
-
-    function saveNewProduct() {
-      const type = document.getElementById('new-prod-type').value;
-
-      if (type === 'perfume') {
-        const title = document.getElementById('p-title').value;
-        const tag = document.getElementById('p-tag').value;
-        const category = document.getElementById('p-cat').value;
-        const price = document.getElementById('p-price').value;
-        const desc = document.getElementById('p-desc').value;
-        const img = currentUploadedImg || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80';
-
-        if (!title || !price) return alert("Completa los datos del perfume.");
-
-        perfumesProducts.push({
-          id: 'p_' + Date.now(), title, tag, category, price, img, desc
-        });
-      } else if (type === 'vaper') {
-        const brandName = document.getElementById('v-brandname').value;
-        const brandKey = document.getElementById('v-brandkey').value;
-        const model = document.getElementById('v-model').value;
-        const puffsKey = document.getElementById('v-puffskey').value.toLowerCase();
-        const price = document.getElementById('v-price').value;
-        const pricePromo = document.getElementById('v-promo').value;
-        const defaultImg = currentUploadedImg || 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=600&q=80';
-
-        if (!model || !price) return alert("Completa los datos del vaper.");
-
-        vapersProducts.push({
-          id: 'v_' + Date.now(),
-          brandName, brandKey, model, puffsKey,
-          puffsText: `${puffsKey.toUpperCase()} Puffs`,
-          price, pricePromo, defaultImg,
-          flavors: tempFlavorList.length ? tempFlavorList : [{ name: "Sabor Tradicional", soldOut: false, img: defaultImg }]
-        });
-      } else if (type === 'tech') {
-        const title = document.getElementById('t-title').value;
-        const tag = document.getElementById('t-tag').value;
-        const price = document.getElementById('t-price').value;
-        const desc = document.getElementById('t-desc').value;
-        const img = currentUploadedImg || 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=600&q=80';
-
-        if (!title || !price) return alert("Completa los datos del producto tecnológico.");
-
-        techProducts.push({
-          id: 't_' + Date.now(), title, tag, price, img, desc
-        });
-      }
-
-      saveAllState();
-      alert("✅ Producto con foto guardado y publicado correctamente.");
-      switchAdminTab('stock', document.querySelectorAll('.admin-tab')[0]);
-    }
-
-    // ACCIONES ADMIN
-    function toggleVaperStock(pIdx, fIdx) {
-      vapersProducts[pIdx].flavors[fIdx].soldOut = !vapersProducts[pIdx].flavors[fIdx].soldOut;
-      saveAllState();
-    }
-    function updateVaperPrice(pIdx, field, val) {
-      vapersProducts[pIdx][field] = val;
-      saveAllState();
-    }
-    function updatePerfumePrice(pIdx, val) {
-      perfumesProducts[pIdx].price = val;
-      saveAllState();
-    }
-    function updateTechPrice(pIdx, val) {
-      techProducts[pIdx].price = val;
-      saveAllState();
-    }
-    function deleteProduct(type, idx) {
-      if (confirm("¿Seguro que deseas eliminar este producto?")) {
-        if (type === 'vaper') vapersProducts.splice(idx, 1);
-        if (type === 'perfume') perfumesProducts.splice(idx, 1);
-        if (type === 'tech') techProducts.splice(idx, 1);
-        saveAllState();
-        renderAdminContent();
-      }
-    }
-
-    // FILTRADO PERFUMES
-    function filterPerfumes(category, btn) {
-      const parent = btn.parentElement;
-      parent.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      document.querySelectorAll('.perfume-card').forEach(card => {
-        card.classList.toggle('hidden', category !== 'todos' && card.dataset.category !== category);
+    function checkoutWhatsApp() {
+      if (!cart.length) return showToast('Tu carrito está vacío');
+      const { totalDiscount, finalTotal, appliedPromos } = calculateCartTotals();
+      let lines = ['Hola, N&G IMPORTADOS! Quiero realizar el siguiente pedido:'];
+      cart.forEach(item => {
+        lines.push(`• ${item.qty}x ${item.title}${item.flavor ? ' (' + item.flavor + ')' : ''} — ${item.price}`);
       });
+      if (totalDiscount > 0) {
+        appliedPromos.forEach(p => lines.push(`• Descuento 2X (${p.model}): -${formatARS(p.saving)}`));
+      }
+      lines.push(`\nTotal estimado: ${formatARS(finalTotal)}`);
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
     }
 
-    // FILTRADO VAPERS
-    function filterVapers(type, value, btn) {
-      activeVaperFilters[type] = value;
-      const parent = btn.parentElement;
-      parent.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      document.querySelectorAll('.vaper-card').forEach(card => {
-        const b = card.getAttribute('data-brand');
-        const p = card.getAttribute('data-puffs');
-        const brandMatch = (activeVaperFilters.brand === 'all' || activeVaperFilters.brand === b);
-        const puffsMatch = (activeVaperFilters.puffs === 'all' || activeVaperFilters.puffs === p);
-
-        card.style.display = (brandMatch && puffsMatch) ? 'flex' : 'none';
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', renderAllProducts);
+    document.addEventListener('DOMContentLoaded', loadCatalogFromSupabase);
   </script>
 </body>
 </html>
